@@ -57,13 +57,13 @@
                 display: block !important;
             }
             main.print-area > * {
-                margin: 0 0 0.5rem 0 !important;
+                margin: 0 0 0.4rem 0 !important;
             }
             #print-header-placeholder, #print-footer-placeholder {
                 display: block !important;
             }
             .print-area section {
-                padding: 0.5rem !important;
+                padding: 0.4rem !important;
                 box-shadow: none !important;
                 border: 1px solid #ccc;
                 break-inside: avoid;
@@ -74,7 +74,7 @@
                 font-size: 8pt;
             }
             .print-area input, .print-area textarea { padding: 2px 4px; }
-            .print-area textarea { height: 3rem !important; }
+            .print-area textarea { height: 2.5rem !important; }
             
             #main-content-grid {
                 display: block !important;
@@ -191,7 +191,7 @@
                             </div>
                             <div class="pt-2">
                                 <h4 class="font-semibold text-sm text-gray-600">TANQUE DE COMBUSTÍVEL:</h4>
-                                <div class="flex space-x-3 text-sm">
+                                <div class="flex flex-wrap space-x-3 text-sm">
                                     <label class="flex items-center"><input type="radio" name="combustivel" class="mr-1">R</label>
                                     <label class="flex items-center"><input type="radio" name="combustivel" class="mr-1">¼</label>
                                     <label class="flex items-center"><input type="radio" name="combustivel" class="mr-1">½</label>
@@ -290,8 +290,8 @@
                 </div>
             </section>
 
-            <footer class="text-center mt-4 text-sm text-gray-700 no-print">
-                <div class="mb-4 flex items-center justify-center gap-2">
+            <footer class="mt-4 text-sm text-gray-700">
+                <div class="text-center mb-4 flex items-center justify-center gap-2">
                     <strong>Local e data da apreensão:</strong> 
                     <input type="text" placeholder="Cidade" class="w-48 p-1 border rounded-md text-sm">,
                     <input type="date" class="p-1 border rounded-md text-sm">
