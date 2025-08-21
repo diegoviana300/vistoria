@@ -61,6 +61,7 @@
             }
             #print-header-placeholder {
                 display: block !important;
+                margin-bottom: 0.4rem !important;
             }
             .print-area section, .print-area footer {
                 padding: 0.4rem !important;
@@ -70,9 +71,10 @@
             }
             .print-area footer {
                 border: none !important;
+                padding-top: 0.5rem !important;
             }
-            .print-area h2 { font-size: 11pt; margin-bottom: 0.25rem; padding-bottom: 0.25rem; }
-            .print-area h3 { font-size: 10pt; }
+            .print-area h2 { font-size: 10pt; margin-bottom: 0.2rem; padding-bottom: 0.2rem; }
+            .print-area h3 { font-size: 9pt; }
             .print-area h4, .print-area p, .print-area label, .print-area li, .print-area span, .print-area input, .print-area textarea {
                 font-size: 8pt;
             }
@@ -85,7 +87,7 @@
             
             #identificacao .grid, #responsaveis .grid {
                 display: grid !important;
-                gap: 0.5rem !important;
+                gap: 0.4rem !important;
             }
             #identificacao .grid {
                 grid-template-columns: repeat(4, 1fr) !important;
@@ -96,17 +98,17 @@
             
             #checklists .grid {
                 grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-                gap: 0.5rem !important;
+                gap: 0.4rem !important;
             }
             #checklists .space-y-3 > :not([hidden]) ~ :not([hidden]) {
-                margin-top: 0.2rem !important;
+                margin-top: 0.15rem !important;
                 margin-bottom: 0 !important;
             }
             #checklists .pt-2 {
-                padding-top: 0.25rem !important;
+                padding-top: 0.2rem !important;
             }
 
-            #avarias p { margin-bottom: 0.5rem !important; }
+            #avarias p { margin-bottom: 0.4rem !important; }
             #avarias .flex-container-for-print {
                 display: flex !important;
                 flex-direction: row !important;
@@ -123,11 +125,13 @@
                 margin: 0 !important;
             }
             #damage-list {
-                min-height: 140px !important;
+                min-height: 130px !important;
             }
             #responsaveis .signature-block {
-                margin-top: 2.5rem !important;
+                margin-top: 2rem !important;
             }
+            #local-data-inputs { display: none; }
+            #local-data-print { display: block !important; }
         }
     </style>
 </head>
@@ -178,7 +182,7 @@
                         
                         <div class="space-y-3">
                             <h3 class="font-semibold text-gray-700">Itens do Veículo</h3>
-                            <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">CRLV - ANO</label>
+                            <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">CRLV</label>
                             <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Manual</label>
                             <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Chave Reserva</label>
                             <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">TAG</label>
@@ -225,8 +229,9 @@
 
                         <div class="space-y-3">
                             <h3 class="font-semibold text-gray-700">Estado de Conservação</h3>
-                            <label class="flex items-center justify-between">Pneus <input type="text" class="ml-2 w-20 p-1 border rounded text-xs"></label>
-                            <label class="flex items-center justify-between">Step <input type="text" class="ml-2 w-20 p-1 border rounded text-xs"></label>
+                            <label class="flex items-center"><input type="text" class="mr-2 w-20 p-1 border rounded text-xs"> Pneus</label>
+                            <label class="flex items-center"><input type="text" class="mr-2 w-20 p-1 border rounded text-xs"> Estepe</label>
+			    <label class="flex items-center"><input type="text" class="mr-2 w-20 p-1 border rounded text-xs">Estado dos bancos</label>
                             <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Extintor de incêndio</label>
                             <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Cintos de segurança</label>
                             <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Macaco</label>
@@ -236,9 +241,7 @@
                             <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Freio de serviço</label>
                             <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Freio de estacionamento</label>
                             <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Vazamentos de óleo</label>
-                            <label class="flex items-center justify-between">Limp. do veículo <input type="text" class="ml-2 w-20 p-1 border rounded text-xs"></label>
                             <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Acendedor de cigarros</label>
-                            <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Estado dos bancos</label>
                             <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Escapamentos</label>
                         </div>
                     </div>
@@ -294,10 +297,15 @@
             </section>
 
             <footer class="mt-4 text-sm text-gray-700">
-                <div class="text-center mb-4 flex items-center justify-center gap-2">
-                    <strong>Local e data da apreensão:</strong> 
-                    <input type="text" placeholder="Cidade" class="w-48 p-1 border rounded-md text-sm">,
-                    <input type="date" class="p-1 border rounded-md text-sm">
+                <div class="text-center mb-4">
+                    <div id="local-data-inputs" class="flex items-center justify-center gap-2">
+                        <strong>Local e data da apreensão:</strong> 
+                        <input id="cidade-input" type="text" placeholder="Cidade" class="w-48 p-1 border rounded-md text-sm">,
+                        <input id="data-input" type="date" class="p-1 border rounded-md text-sm">
+                    </div>
+                    <p id="local-data-print" class="hidden">
+                        <strong>Local e data da apreensão:</strong> <span id="cidade-print"></span>, <span id="data-print"></span>
+                    </p>
                 </div>
                 <div class="flex justify-between items-center border-t-2 border-gray-400 pt-4">
                     <div class="text-left text-xs text-gray-500">
@@ -309,30 +317,10 @@
                     </div>
                 </div>
             </footer>
-
-            <div id="print-footer-placeholder" class="hidden">
-                 <div class="text-center mb-2">
-                    <strong>Local e data da apreensão:</strong> 
-                    <input type="text" placeholder="________________" class="w-40 border-b text-center">,
-                    <input type="text" placeholder="____" class="w-8 border-b text-center"> /
-                    <input type="text" placeholder="____" class="w-8 border-b text-center"> /
-                    <input type="text" placeholder="________" class="w-16 border-b text-center">
-                 </div>
-                 <div class="flex justify-between items-center border-t-2 border-gray-400 pt-2 mt-2">
-                    <div class="text-left text-xs">
-                        <p>Rua Brusque, nº 1224, Centro, Itajaí - SC, CEP 88.303-001</p>
-                        <p>E-mail: gaecoitajai@mpsc.mp.br</p>
-                    </div>
-                    <div class="flex items-center">
-                        <img src="imagem/gaeco2.bmp" alt="Logos" class="h-8">
-                    </div>
-                </div>
-            </div>
         </main>
         
         <div class="mt-8 text-center space-x-2 sm:space-x-4 no-print">
-            <button onclick="window.print()" class="bg-teal-600 text-white font-bold py-2 px-4 sm:px-6 rounded-lg hover:bg-teal-700 transition-colors text-sm sm:text-base">Imprimir / PDF</button>
-            <button id="share-btn" class="bg-blue-600 text-white font-bold py-2 px-4 sm:px-6 rounded-lg hover:bg-blue-700 transition-colors text-sm sm:text-base">Compartilhar</button>
+            <button onclick="imprimir()" class="bg-teal-600 text-white font-bold py-2 px-4 sm:px-6 rounded-lg hover:bg-teal-700 transition-colors text-sm sm:text-base">Imprimir / PDF</button>
             <button onclick="clearForm()" class="bg-red-500 text-white font-bold py-2 px-4 sm:px-6 rounded-lg hover:bg-red-600 transition-colors text-sm sm:text-base">Limpar</button>
         </div>
     </div>
@@ -362,7 +350,6 @@
             const saveDamageBtn = document.getElementById('save-damage');
             const cancelDamageBtn = document.getElementById('cancel-damage');
             const damageList = document.getElementById('damage-list');
-            const shareBtn = document.getElementById('share-btn');
 
             let damages = [];
             let currentClickPosition = { x: 0, y: 0 };
@@ -430,39 +417,22 @@
                     });
                 }
             }
-            
-            shareBtn.addEventListener('click', async () => {
-                const shareData = {
-                    title: 'Ficha de Vistoria Veicular',
-                    text: 'Acesse a ficha de vistoria interativa para preenchimento.',
-                    url: window.location.href
-                };
-                try {
-                    if (navigator.share) {
-                        await navigator.share(shareData);
-                    } else {
-                        throw new Error('Share API not supported');
-                    }
-                } catch (err) {
-                    // Fallback to copy to clipboard
-                    const textArea = document.createElement('textarea');
-                    textArea.value = window.location.href;
-                    document.body.appendChild(textArea);
-                    textArea.select();
-                    try {
-                        document.execCommand('copy');
-                        const notification = document.getElementById('notification-modal');
-                        notification.classList.remove('hidden');
-                        setTimeout(() => {
-                            notification.classList.add('hidden');
-                        }, 3000);
-                    } catch (copyErr) {
-                        console.error('Fallback copy failed', copyErr);
-                    }
-                    document.body.removeChild(textArea);
-                }
-            });
         });
+
+        function imprimir() {
+            const cidade = document.getElementById('cidade-input').value || '________________';
+            const dataInput = document.getElementById('data-input').value;
+            let dataFormatada = '____ / ____ / ________';
+            if (dataInput) {
+                const [ano, mes, dia] = dataInput.split('-');
+                dataFormatada = `${dia} / ${mes} / ${ano}`;
+            }
+            
+            document.getElementById('cidade-print').textContent = cidade;
+            document.getElementById('data-print').textContent = dataFormatada;
+            
+            window.print();
+        }
 
         function clearForm() {
             if (confirm('Tem certeza que deseja limpar todos os campos e avarias registradas? Esta ação não pode ser desfeita.')) {
