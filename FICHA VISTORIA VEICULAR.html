@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ficha de Vistoria Veicular Interativa</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chosen Palette: Warm Neutrals -->
+    <!-- Application Structure Plan: A estrutura da aplicação foi desenhada como um formulário digital de página única, dividido em seções lógicas que seguem o fluxo do documento original (Identificação, Checklists, Avarias, Responsáveis). Esta abordagem foi escolhida por ser a mais intuitiva para um usuário que precisa preencher um relatório de forma sequencial. O principal elemento interativo é o diagrama de avarias, que transforma uma anotação textual em um registro visual e preciso, melhorando significativamente a usabilidade e a qualidade da informação coletada. A aplicação culmina com ações claras (imprimir/limpar). -->
+    <!-- Visualization & Content Choices: Informação: Campos de texto e checkboxes (HTML padrão). Objetivo: Coleta de dados estruturados. Interação: Preenchimento padrão. Justificativa: Universalmente compreendido. | Informação: Avarias do veículo. Objetivo: Registrar danos espaciais. Apresentação: Imagem do veículo (IMG tag). Interação: Cliques na imagem abrem um modal para adicionar descrição, marcando o local exato com cores distintas. Justificativa: Utiliza a imagem fornecida pelo usuário para máxima fidelidade. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .damage-marker {
+            position: absolute;
+            width: 16px;
+            height: 16px;
+            border: 2px solid white;
+            box-shadow: 0 0 5px rgba(0,0,0,0.5);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            cursor: pointer;
+            transition: transform 0.2s;
+            z-index: 10;
+        }
+        .damage-marker:hover {
+            transform: translate(-50%, -50%) scale(1.2);
+        }
+        @media print {
+            @page {
+                size: A4 portrait;
+                margin: 1cm;
+            }
+            html, body {
+                width: 210mm;
+                height: 297mm;
+                font-size: 9pt;
+            }
+            body {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+            .no-print { display: none !important; }
+            .print-area, .print-area * { visibility: visible; }
+            .print-area {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                box-shadow: none !important;
+                border: none !important;
+            }
+            main.print-area {
+                display: block !important;
+            }
+            main.print-area > * {
+                margin: 0 0 0.5rem 0 !important;
+            }
+            #print-header-placeholder, #print-footer-placeholder {
+                display: block !important;
+            }
+            .print-area section {
+                padding: 0.5rem !important;
+                box-shadow: none !important;
+                border: 1px solid #ccc;
+                break-inside: avoid;
+            }
+            .print-area h2 { font-size: 11pt; margin-bottom: 0.25rem; padding-bottom: 0.25rem; }
+            .print-area h3 { font-size: 10pt; }
+            .print-area h4, .print-area p, .print-area label, .print-area li, .print-area span, .print-area input, .print-area textarea {
+                font-size: 8pt;
+            }
+            .print-area input, .print-area textarea { padding: 2px 4px; }
+            .print-area textarea { height: 3rem !important; }
+            
+            #main-content-grid {
+                display: block !important;
+            }
+            
+            #identificacao .grid, #responsaveis .grid {
+                display: grid !important;
+                gap: 0.5rem !important;
+            }
+            #identificacao .grid {
+                grid-template-columns: repeat(4, 1fr) !important;
+            }
+             #responsaveis .grid {
+                grid-template-columns: repeat(2, 1fr) !important;
+            }
+            
+            #checklists .grid {
+                grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+                gap: 0.5rem !important;
+            }
+            #checklists .space-y-3 > :not([hidden]) ~ :not([hidden]) {
+                margin-top: 0.2rem !important;
+                margin-bottom: 0 !important;
+            }
+            #checklists .pt-2 {
+                padding-top: 0.25rem !important;
+            }
+
+            #avarias p { margin-bottom: 0.5rem !important; }
+            #avarias .flex-container-for-print {
+                display: flex !important;
+                flex-direction: row !important;
+                gap: 0.5rem !important;
+                align-items: flex-start !important;
+            }
+            #car-diagram-container {
+                width: 65% !important;
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+            #damage-list-container {
+                width: 35% !important;
+                margin: 0 !important;
+            }
+            #damage-list {
+                min-height: 140px !important;
+            }
+            #responsaveis .signature-block {
+                margin-top: 2.5rem !important;
+            }
+        }
+    </style>
+</head>
+<body class="bg-stone-100 text-gray-800">
+
+    <div class="container mx-auto max-w-7xl p-4 sm:p-6 lg:p-8">
+        
+        <header class="mb-8 no-print">
+            <div class="flex items-center">
+                <img src="C:\Users\DVdosSantos\Desktop\Ficha Interativa\imagem\logo_mpsc.png" alt="Logo MPSC" class="h-16 mr-4">
+                
+            </div>
+            <div class="text-center border-t border-b border-gray-400 py-1 mt-2">
+                <p class="text-sm font-semibold text-gray-700">GRUPO DE ATUAÇÃO ESPECIAL DE COMBATE ÀS ORGANIZAÇÕES CRIMINOSAS - GAECO</p>
+                <p class="text-xs text-gray-600">GRUPO REGIONAL DE ITAJAÍ</p>
+            </div>
+            <h1 class="text-2xl font-bold text-gray-900 text-center mt-4">Ficha de Vistoria Veicular</h1>
+        </header>
+
+        <main class="space-y-6 print-area">
+            
+            <div id="print-header-placeholder" class="hidden">
+                <div class="text-center">
+                    <div class="flex items-center">
+                        <img src="C:\Users\DVdosSantos\Desktop\Ficha Interativa\imagem\logo_mpsc.png" alt="Logo MPSC" class="h-12 mr-4">
+                        
+                    </div>
+                    <div class="border-t border-b border-gray-400 py-1 mt-2 text-xs">
+                        <p class="font-semibold">GRUPO DE ATUAÇÃO ESPECIAL DE COMBATE ÀS ORGANIZAÇÕES CRIMINOSAS - GAECO</p>
+                        <p>GRUPO REGIONAL DE ITAJAÍ</p>
+                    </div>
+                    <h1 class="text-lg font-bold text-center mt-2 mb-2">FICHA DE VISTORIA VEICULAR</h1>
+                </div>
+            </div>
+
+            <section id="identificacao" class="bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-xl font-bold mb-4 border-b pb-2 sr-only">1. Identificação do Veículo</h2>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                    <input type="text" placeholder="Autos n." class="p-2 border rounded-md">
+                    <input type="text" placeholder="Veículo" class="p-2 border rounded-md">
+                    <input type="text" value="" placeholder="Placa" class="p-2 border rounded-md">
+                    <input type="number" placeholder="KM" class="p-2 border rounded-md">
+                </div>
+            </section>
+
+            <div id="main-content-grid" class="grid grid-cols-1 lg:grid-cols-1 gap-6">
+                <section id="checklists" class="bg-white p-6 rounded-lg shadow-md">
+                    <h2 class="text-xl font-bold mb-4 border-b pb-2">2. Checklists de Vistoria</h2>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                        
+                        <div class="space-y-3">
+                            <h3 class="font-semibold text-gray-700">Itens do Veículo</h3>
+                            <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">CRLV - ANO</label>
+                            <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Manual</label>
+                            <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Chave Reserva</label>
+                            <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">TAG</label>
+                            <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Cartão Abastecimento</label>
+                            <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Cartão Seguro</label>
+                            <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Adesivos</label>
+                            <div class="pt-2">
+                                <h4 class="font-semibold text-sm text-gray-600">NÍVEL:</h4>
+                                <label class="flex items-center text-sm"><input type="checkbox" class="h-4 w-4 rounded mr-2">Óleo de Motor</label>
+                                <label class="flex items-center text-sm"><input type="checkbox" class="h-4 w-4 rounded mr-2">Óleo de freio</label>
+                                <label class="flex items-center text-sm"><input type="checkbox" class="h-4 w-4 rounded mr-2">Água do radiador</label>
+                                <label class="flex items-center text-sm"><input type="checkbox" class="h-4 w-4 rounded mr-2">Água do esguicho</label>
+                            </div>
+                            <div class="pt-2">
+                                <h4 class="font-semibold text-sm text-gray-600">TANQUE DE COMBUSTÍVEL:</h4>
+                                <div class="flex space-x-3 text-sm">
+                                    <label class="flex items-center"><input type="radio" name="combustivel" class="mr-1">R</label>
+                                    <label class="flex items-center"><input type="radio" name="combustivel" class="mr-1">¼</label>
+                                    <label class="flex items-center"><input type="radio" name="combustivel" class="mr-1">½</label>
+                                    <label class="flex items-center"><input type="radio" name="combustivel" class="mr-1">¾</label>
+                                    <label class="flex items-center"><input type="radio" name="combustivel" class="mr-1">Cheio</label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="space-y-3">
+                            <h3 class="font-semibold text-gray-700">Func. Parte Elétrica</h3>
+                            <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Retrovisores</label>
+                            <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Buzina</label>
+                            <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Limpador de para-brisa</label>
+                            <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Esguicho</label>
+                            <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Luz interna</label>
+                            <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Luz do painel</label>
+                            <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Luz alta</label>
+                            <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Luz baixa</label>
+                            <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Luz de ré</label>
+                            <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Pisca-alerta/pisca-pisca</label>
+                            <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Faróis</label>
+                            <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Luz de freio</label>
+                            <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Luz da placa</label>
+                            <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Velocímetro</label>
+                            <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Temperatura</label>
+                        </div>
+
+                        <div class="space-y-3">
+                            <h3 class="font-semibold text-gray-700">Estado de Conservação</h3>
+                            <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Pneus</label>
+                            <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Estepe</label>
+                            <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Extintor de incêndio</label>
+                            <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Cintos de segurança</label>
+                            <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Macaco</label>
+                            <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Chave de roda</label>
+                            <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Tampa do radiador</label>
+                            <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Triângulo</label>
+                            <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Freio de serviço</label>
+                            <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Freio de estacionamento</label>
+                            <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Vazamentos de óleo</label>
+                            <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Limp. do veículo</label>
+                            <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Acendedor de cigarros</label>
+                            <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Estado dos bancos</label>
+                            <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Escapamentos</label>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="avarias" class="bg-white p-6 rounded-lg shadow-md">
+                    <h2 class="text-xl font-bold mb-4 border-b pb-2">3. Registro Interativo de Avarias</h2>
+                    <p class="text-sm text-gray-600 mb-4">Clique na área do veículo para adicionar uma anotação de avaria.</p>
+                    <div class="flex flex-col lg:flex-row gap-6 items-start flex-container-for-print">
+                        <div id="car-diagram-container" class="w-full lg:w-2/3 mx-auto relative select-none cursor-pointer">
+                            <div class="relative w-full max-w-lg mx-auto aspect-[1.58/1]">
+                                <img src="C:\Users\DVdosSantos\Desktop\Ficha Interativa\imagem\carro.png" alt="Diagrama do Veículo" class="absolute inset-0 w-full h-full object-contain" onerror="this.onerror=null;this.src='https://placehold.co/600x379?text=Imagem+Nao+Encontrada';">
+                            </div>
+                        </div>
+                        <div id="damage-list-container" class="w-full lg:w-1/3 mt-4 lg:mt-0">
+                            <h3 class="font-semibold text-gray-700 mb-2">Lista de Avarias</h3>
+                            <ul id="damage-list" class="space-y-2 bg-gray-50 p-3 rounded-md min-h-[100px] text-sm">
+                                <li class="text-gray-400 italic">Nenhuma avaria registrada.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            
+            <section id="observacoes" class="bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-xl font-bold mb-4 border-b pb-2">4. Observações Gerais</h2>
+                <textarea placeholder="Digite aqui quaisquer observações adicionais..." class="w-full p-2 border rounded-md h-24"></textarea>
+            </section>
+
+            <section id="responsaveis" class="bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-xl font-bold mb-4 border-b pb-2">5. Responsáveis</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block font-semibold text-sm mb-1">Policial responsável/vistoriador:</label>
+                        <input type="text" value="" class="w-full p-2 border rounded-md mb-2">
+                        <label class="block font-semibold text-sm mb-1">Matrícula:</label>
+                        <input type="text" value="" class="w-full p-2 border rounded-md">
+                    </div>
+                    <div>
+                        <label class="block font-semibold text-sm mb-1">Proprietário/possuidor:</label>
+                        <input type="text" class="w-full p-2 border rounded-md mb-2">
+                        <label class="block font-semibold text-sm mb-1">CPF:</label>
+                        <input type="text" class="w-full p-2 border rounded-md">
+                    </div>
+                </div>
+                 <div class="mt-12 signature-block">
+                    <p class="font-semibold text-sm mb-2">Assinaturas:</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                         <div class="border-t-2 border-gray-400 pt-2 text-center text-sm text-gray-600">Assinatura do Vistoriador</div>
+                         <div class="border-t-2 border-gray-400 pt-2 text-center text-sm text-gray-600">Assinatura do Proprietário/Possuidor</div>
+                    </div>
+                </div>
+            </section>
+
+            <footer class="text-center mt-4 text-sm text-gray-700 no-print">
+                <p class="mb-4"><strong>Local e data da apreensão:</strong> ____________________, ____ / ____ / ________</p>
+                <div class="flex justify-between items-center border-t-2 border-gray-400 pt-4">
+                    <div class="text-left text-xs text-gray-500">
+                        <p>Rua Brusque, nº 1224, Centro, Itajaí - SC, CEP 88.303-001</p>
+                        <p>E-mail: gaecoitajai@mpsc.mp.br</p>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <img src="C:\Users\DVdosSantos\Desktop\Ficha Interativa\imagem\gaeco2.bmp" alt="Logos" class="h-10">
+                    </div>
+                </div>
+            </footer>
+
+            <div id="print-footer-placeholder" class="hidden">
+                 <p class="text-center mb-2"><strong>Local e data da apreensão:</strong> ____________________, ____ / ____ / ________</p>
+                 <div class="flex justify-between items-center border-t-2 border-gray-400 pt-2 mt-2">
+                    <div class="text-left text-xs">
+                        <p>Rua Brusque, nº 1224, Centro, Itajaí - SC, CEP 88.303-001</p>
+                        <p>E-mail: gaecoitajai@mpsc.mp.br</p>
+                    </div>
+                    <div class="flex items-center">
+                        <img src="C:\Users\DVdosSantos\Desktop\Ficha Interativa\imagem\gaeco2.bmp" alt="Logos" class="h-8">
+                    </div>
+                </div>
+            </div>
+        </main>
+        
+        <div class="mt-8 text-center space-x-4 no-print">
+            <button onclick="window.print()" class="bg-teal-600 text-white font-bold py-2 px-6 rounded-lg hover:bg-teal-700 transition-colors">Imprimir / Salvar como PDF</button>
+            <button onclick="clearForm()" class="bg-red-500 text-white font-bold py-2 px-6 rounded-lg hover:bg-red-600 transition-colors">Limpar Formulário</button>
+        </div>
+    </div>
+
+    <div id="damage-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 hidden z-50">
+        <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-sm">
+            <h3 class="text-lg font-bold mb-4">Adicionar Avaria</h3>
+            <textarea id="damage-description" class="w-full p-2 border rounded-md h-20" placeholder="Descreva a avaria (ex: Risco profundo, amassado)"></textarea>
+            <p id="damage-error" class="text-red-500 text-sm mt-2 hidden">Por favor, insira uma descrição.</p>
+            <div class="mt-4 flex justify-end space-x-2">
+                <button id="cancel-damage" class="bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-lg hover:bg-gray-400">Cancelar</button>
+                <button id="save-damage" class="bg-teal-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-teal-700">Salvar</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="confirm-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 hidden z-50">
+        <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-sm">
+            <h3 id="confirm-title" class="text-lg font-bold mb-2">Confirmar Ação</h3>
+            <p id="confirm-message" class="text-gray-600 mb-4">Tem certeza que deseja continuar?</p>
+            <div class="mt-4 flex justify-end space-x-2">
+                <button id="confirm-cancel-btn" class="bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-lg hover:bg-gray-400">Cancelar</button>
+                <button id="confirm-ok-btn" class="bg-red-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-red-600">Confirmar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const carDiagramContainer = document.getElementById('car-diagram-container').querySelector('.relative');
+            const damageModal = document.getElementById('damage-modal');
+            const damageDescription = document.getElementById('damage-description');
+            const damageError = document.getElementById('damage-error');
+            const saveDamageBtn = document.getElementById('save-damage');
+            const cancelDamageBtn = document.getElementById('cancel-damage');
+            const damageList = document.getElementById('damage-list');
+
+            let damages = [];
+            let currentClickPosition = { x: 0, y: 0 };
+            const damageColors = ['#ef4444', '#3b82f6', '#22c55e', '#eab308', '#a855f7', '#f97316', '#14b8a6'];
+            let colorIndex = 0;
+
+            carDiagramContainer.addEventListener('click', function (e) {
+                const rect = carDiagramContainer.getBoundingClientRect();
+                currentClickPosition = {
+                    x: ((e.clientX - rect.left) / rect.width) * 100,
+                    y: ((e.clientY - rect.top) / rect.height) * 100
+                };
+                damageDescription.value = '';
+                damageError.classList.add('hidden');
+                damageModal.classList.remove('hidden');
+                damageDescription.focus();
+            });
+
+            function closeDamageModal() {
+                damageModal.classList.add('hidden');
+            }
+
+            cancelDamageBtn.addEventListener('click', closeDamageModal);
+
+            saveDamageBtn.addEventListener('click', function () {
+                const description = damageDescription.value.trim();
+                if (description) {
+                    const color = damageColors[colorIndex % damageColors.length];
+                    colorIndex++;
+                    damages.push({ ...currentClickPosition, description, color });
+                    renderDamages();
+                    closeDamageModal();
+                } else {
+                    damageError.classList.remove('hidden');
+                }
+            });
+
+            function renderDamages() {
+                carDiagramContainer.querySelectorAll('.damage-marker').forEach(marker => marker.remove());
+                
+                damageList.innerHTML = '';
+                if (damages.length === 0) {
+                    damageList.innerHTML = '<li class="text-gray-400 italic">Nenhuma avaria registrada.</li>';
+                } else {
+                    damages.forEach((damage, index) => {
+                        const marker = document.createElement('div');
+                        marker.className = 'damage-marker';
+                        marker.style.left = `${damage.x}%`;
+                        marker.style.top = `${damage.y}%`;
+                        marker.style.backgroundColor = damage.color;
+                        marker.title = damage.description;
+                        marker.dataset.index = index;
+                        carDiagramContainer.appendChild(marker);
+
+                        const listItem = document.createElement('li');
+                        listItem.className = 'flex items-center';
+                        
+                        const colorDot = document.createElement('span');
+                        colorDot.className = 'w-3 h-3 rounded-full mr-2 flex-shrink-0';
+                        colorDot.style.backgroundColor = damage.color;
+                        
+                        listItem.appendChild(colorDot);
+                        listItem.append(damage.description);
+                        damageList.appendChild(listItem);
+                    });
+                }
+            }
+            
+            const confirmModal = document.getElementById('confirm-modal');
+            const confirmOkBtn = document.getElementById('confirm-ok-btn');
+            const confirmCancelBtn = document.getElementById('confirm-cancel-btn');
+            let confirmCallback = null;
+
+            window.showConfirm = function(title, message, callback) {
+                document.getElementById('confirm-title').textContent = title;
+                document.getElementById('confirm-message').textContent = message;
+                confirmCallback = callback;
+                confirmModal.classList.remove('hidden');
+            }
+
+            confirmCancelBtn.addEventListener('click', () => {
+                confirmModal.classList.add('hidden');
+                confirmCallback = null;
+            });
+
+            confirmOkBtn.addEventListener('click', () => {
+                if (confirmCallback) {
+                    confirmCallback();
+                }
+                confirmModal.classList.add('hidden');
+                confirmCallback = null;
+            });
+        });
+
+        function clearForm() {
+            showConfirm(
+                'Limpar Formulário',
+                'Tem certeza que deseja limpar todos os campos e avarias registradas? Esta ação não pode ser desfeita.',
+                () => {
+                    location.reload();
+                }
+            );
+        }
+    </script>
+</body>
+</html>
