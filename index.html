@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ficha de Vistoria Veicular Interativa</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/signature_pad/1.5.3/signature_pad.min.js"></script>
     <!-- Chosen Palette: Warm Neutrals -->
     <!-- Application Structure Plan: A estrutura da aplicação foi desenhada como um formulário digital de página única, dividido em seções lógicas que seguem o fluxo do documento original (Identificação, Checklists, Avarias, Responsáveis). Esta abordagem foi escolhida por ser a mais intuitiva para um usuário que precisa preencher um relatório de forma sequencial. O principal elemento interativo é o diagrama de avarias, que transforma uma anotação textual em um registro visual e preciso, melhorando significativamente a usabilidade e a qualidade da informação coletada. A aplicação culmina com ações claras (imprimir/limpar). -->
     <!-- Visualization & Content Choices: Informação: Campos de texto e checkboxes (HTML padrão). Objetivo: Coleta de dados estruturados. Interação: Preenchimento padrão. Justificativa: Universalmente compreendido. | Informação: Avarias do veículo. Objetivo: Registrar danos espaciais. Apresentação: Imagem do veículo (IMG tag). Interação: Cliques na imagem abrem um modal para adicionar descrição, marcando o local exato com cores distintas. Justificativa: Utiliza a imagem fornecida pelo usuário para máxima fidelidade. -->
@@ -28,6 +29,22 @@
         }
         .damage-marker:hover {
             transform: translate(-50%, -50%) scale(1.2);
+        }
+        #signature-pad {
+            border: 2px dashed #ccc;
+            border-radius: 0.5rem;
+            cursor: crosshair;
+        }
+        .signature-container {
+            position: relative;
+        }
+        .signature-image {
+            position: absolute;
+            bottom: 8px; /* Position above the line */
+            left: 50%;
+            transform: translateX(-50%);
+            max-height: 4rem; /* 64px */
+            width: auto;
         }
         @media print {
             @page {
@@ -132,6 +149,9 @@
             }
             #local-data-inputs { display: none; }
             #local-data-print { display: block !important; }
+            .signature-image {
+                max-height: 2.5rem !important; /* Smaller signature for print */
+            }
         }
     </style>
 </head>
@@ -182,7 +202,7 @@
                         
                         <div class="space-y-3">
                             <h3 class="font-semibold text-gray-700">Itens do Veículo</h3>
-                            <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">CRLV</label>
+                            <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">CRLV - ANO</label>
                             <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Manual</label>
                             <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Chave Reserva</label>
                             <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">TAG</label>
@@ -231,7 +251,6 @@
                             <h3 class="font-semibold text-gray-700">Estado de Conservação</h3>
                             <label class="flex items-center"><input type="text" class="mr-2 w-20 p-1 border rounded text-xs"> Pneus</label>
                             <label class="flex items-center"><input type="text" class="mr-2 w-20 p-1 border rounded text-xs"> Estepe</label>
-			    <label class="flex items-center"><input type="text" class="mr-2 w-20 p-1 border rounded text-xs">Estado dos bancos</label>
                             <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Extintor de incêndio</label>
                             <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Cintos de segurança</label>
                             <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Macaco</label>
@@ -242,6 +261,7 @@
                             <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Freio de estacionamento</label>
                             <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Vazamentos de óleo</label>
                             <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Acendedor de cigarros</label>
+                            <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Estado dos bancos</label>
                             <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Escapamentos</label>
                         </div>
                     </div>
@@ -290,8 +310,14 @@
                  <div class="mt-12 signature-block">
                     <p class="font-semibold text-sm mb-2">Assinaturas:</p>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                         <div class="border-t-2 border-gray-400 pt-2 text-center text-sm text-gray-600">Assinatura do Vistoriador</div>
-                         <div class="border-t-2 border-gray-400 pt-2 text-center text-sm text-gray-600">Assinatura do Proprietário/Possuidor</div>
+                         <div id="signature-pad-vistoriador" class="signature-container border-t-2 border-gray-400 pt-2 text-center text-sm text-gray-600">
+                            <span class="signature-text">Assinatura do Vistoriador</span>
+                            <button class="signature-button ml-2 text-blue-600 hover:underline text-xs no-print" onclick="openSignatureModal('vistoriador')">[ Assinar ]</button>
+                         </div>
+                         <div id="signature-pad-proprietario" class="signature-container border-t-2 border-gray-400 pt-2 text-center text-sm text-gray-600">
+                            <span class="signature-text">Assinatura do Proprietário/Possuidor</span>
+                            <button class="signature-button ml-2 text-blue-600 hover:underline text-xs no-print" onclick="openSignatureModal('proprietario')">[ Assinar ]</button>
+                         </div>
                     </div>
                 </div>
             </section>
@@ -337,11 +363,26 @@
         </div>
     </div>
 
-    <div id="notification-modal" class="fixed top-5 right-5 bg-green-500 text-white py-2 px-4 rounded-lg shadow-lg hidden z-50">
-        <p>Link copiado para a área de transferência!</p>
+    <div id="signature-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 hidden z-50">
+        <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-lg">
+            <h3 class="text-lg font-bold mb-4">Desenhe a Assinatura</h3>
+            <div class="w-full h-48 md:h-64">
+                <canvas id="signature-pad"></canvas>
+            </div>
+            <div class="mt-4 flex justify-between">
+                <button id="close-signature" class="bg-gray-200 text-gray-800 font-bold py-2 px-4 rounded-lg hover:bg-gray-300">Cancelar</button>
+                <div>
+                    <button id="clear-signature" class="bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-lg hover:bg-gray-400">Limpar</button>
+                    <button id="save-signature" class="bg-teal-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-teal-700">Salvar</button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>
+        let signaturePad;
+        let currentSignatureTargetId;
+
         document.addEventListener('DOMContentLoaded', function () {
             const carDiagramContainer = document.getElementById('car-diagram-container').querySelector('.relative');
             const damageModal = document.getElementById('damage-modal');
@@ -350,6 +391,64 @@
             const saveDamageBtn = document.getElementById('save-damage');
             const cancelDamageBtn = document.getElementById('cancel-damage');
             const damageList = document.getElementById('damage-list');
+            
+            const signatureModal = document.getElementById('signature-modal');
+            const canvas = document.getElementById('signature-pad');
+            const clearSignatureBtn = document.getElementById('clear-signature');
+            const saveSignatureBtn = document.getElementById('save-signature');
+            const closeSignatureBtn = document.getElementById('close-signature');
+
+            signaturePad = new SignaturePad(canvas, {
+                backgroundColor: 'rgb(255, 255, 255)'
+            });
+
+            function resizeCanvas() {
+                const ratio =  Math.max(window.devicePixelRatio || 1, 1);
+                canvas.width = canvas.offsetWidth * ratio;
+                canvas.height = canvas.offsetHeight * ratio;
+                canvas.getContext("2d").scale(ratio, ratio);
+                signaturePad.clear(); 
+            }
+            window.addEventListener("resize", resizeCanvas);
+            
+
+            window.openSignatureModal = (targetId) => {
+                currentSignatureTargetId = targetId;
+                signatureModal.classList.remove('hidden');
+                resizeCanvas();
+            };
+
+            closeSignatureBtn.addEventListener('click', () => {
+                signatureModal.classList.add('hidden');
+            });
+
+            clearSignatureBtn.addEventListener('click', () => {
+                signaturePad.clear();
+            });
+
+            saveSignatureBtn.addEventListener('click', () => {
+                if (signaturePad.isEmpty()) {
+                    alert("Por favor, forneça uma assinatura.");
+                } else {
+                    const dataURL = signaturePad.toDataURL();
+                    const targetDiv = document.getElementById(`signature-pad-${currentSignatureTargetId}`);
+                    
+                    let img = targetDiv.querySelector('.signature-image');
+                    if (!img) {
+                        img = document.createElement('img');
+                        img.className = 'signature-image';
+                        targetDiv.appendChild(img);
+                    }
+                    img.src = dataURL;
+                    img.alt = "Assinatura";
+                    
+                    targetDiv.querySelector('.signature-text').style.display = 'none';
+                    targetDiv.querySelector('.signature-button').textContent = '[ Refazer ]';
+                    
+                    signatureModal.classList.add('hidden');
+                }
+            });
+
 
             let damages = [];
             let currentClickPosition = { x: 0, y: 0 };
