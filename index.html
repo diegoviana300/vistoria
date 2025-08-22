@@ -419,6 +419,14 @@
             }
             window.addEventListener("resize", resizeCanvas);
             
+            window.addEventListener("orientationchange", function() {
+                if (!signatureModal.classList.contains('hidden')) {
+                    closeSignatureBtn.click();
+                    setTimeout(() => {
+                        openSignatureModal(currentSignatureTargetId);
+                    }, 100); // A small delay to ensure the orientation change is complete
+                }
+            });
 
             window.openSignatureModal = (targetId) => {
                 currentSignatureTargetId = targetId;
