@@ -35,16 +35,9 @@
             border-radius: 0.5rem;
             cursor: crosshair;
         }
-        .signature-container {
-            position: relative;
-        }
-        .signature-image {
-            position: absolute;
-            bottom: 8px; /* Position above the line */
-            left: 50%;
-            transform: translateX(-50%);
-            max-height: 4rem; /* 64px */
-            width: auto;
+        .signature-display {
+            height: 4rem; /* 64px */
+            margin-bottom: 0.5rem;
         }
         @media print {
             @page {
@@ -149,8 +142,8 @@
             }
             #local-data-inputs { display: none; }
             #local-data-print { display: block !important; }
-            .signature-image {
-                max-height: 2.5rem !important; /* Smaller signature for print */
+            .signature-display {
+                height: 3rem !important;
             }
         }
     </style>
@@ -310,13 +303,19 @@
                  <div class="mt-12 signature-block">
                     <p class="font-semibold text-sm mb-2">Assinaturas:</p>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                         <div id="signature-pad-vistoriador" class="signature-container border-t-2 border-gray-400 pt-2 text-center text-sm text-gray-600">
-                            <span class="signature-text">Assinatura do Vistoriador</span>
-                            <button class="signature-button ml-2 text-blue-600 hover:underline text-xs no-print" onclick="openSignatureModal('vistoriador')">[ Assinar ]</button>
+                         <div>
+                            <div id="signature-display-vistoriador" class="signature-display w-full flex items-center justify-center"></div>
+                            <div class="border-t-2 border-gray-400 pt-2 text-center text-sm text-gray-600">
+                                Assinatura do Vistoriador
+                                <button class="ml-2 text-blue-600 hover:underline text-xs no-print" onclick="openSignatureModal('vistoriador')">[ Assinar ]</button>
+                            </div>
                          </div>
-                         <div id="signature-pad-proprietario" class="signature-container border-t-2 border-gray-400 pt-2 text-center text-sm text-gray-600">
-                            <span class="signature-text">Assinatura do Proprietário/Possuidor</span>
-                            <button class="signature-button ml-2 text-blue-600 hover:underline text-xs no-print" onclick="openSignatureModal('proprietario')">[ Assinar ]</button>
+                         <div>
+                            <div id="signature-display-proprietario" class="signature-display w-full flex items-center justify-center"></div>
+                            <div class="border-t-2 border-gray-400 pt-2 text-center text-sm text-gray-600">
+                                Assinatura do Proprietário/Possuidor
+                                <button class="ml-2 text-blue-600 hover:underline text-xs no-print" onclick="openSignatureModal('proprietario')">[ Assinar ]</button>
+                            </div>
                          </div>
                     </div>
                 </div>
@@ -364,10 +363,10 @@
     </div>
 
     <div id="signature-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 hidden z-50">
-        <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-lg">
+        <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-lg flex flex-col" style="height: 80vh; max-height: 500px;">
             <h3 class="text-lg font-bold mb-4">Desenhe a Assinatura</h3>
-            <div class="w-full h-48 md:h-64">
-                <canvas id="signature-pad"></canvas>
+            <div class="flex-grow w-full">
+                <canvas id="signature-pad" class="w-full h-full"></canvas>
             </div>
             <div class="mt-4 flex justify-between">
                 <button id="close-signature" class="bg-gray-200 text-gray-800 font-bold py-2 px-4 rounded-lg hover:bg-gray-300">Cancelar</button>
@@ -415,7 +414,9 @@
             window.openSignatureModal = (targetId) => {
                 currentSignatureTargetId = targetId;
                 signatureModal.classList.remove('hidden');
-                resizeCanvas();
+                setTimeout(() => {
+                    resizeCanvas();
+                }, 10); 
             };
 
             closeSignatureBtn.addEventListener('click', () => {
@@ -431,19 +432,11 @@
                     alert("Por favor, forneça uma assinatura.");
                 } else {
                     const dataURL = signaturePad.toDataURL();
-                    const targetDiv = document.getElementById(`signature-pad-${currentSignatureTargetId}`);
+                    const targetDiv = document.getElementById(`signature-display-${currentSignatureTargetId}`);
+                    targetDiv.innerHTML = `<img src="${dataURL}" alt="Assinatura" class="mx-auto h-full object-contain"/>`;
                     
-                    let img = targetDiv.querySelector('.signature-image');
-                    if (!img) {
-                        img = document.createElement('img');
-                        img.className = 'signature-image';
-                        targetDiv.appendChild(img);
-                    }
-                    img.src = dataURL;
-                    img.alt = "Assinatura";
-                    
-                    targetDiv.querySelector('.signature-text').style.display = 'none';
-                    targetDiv.querySelector('.signature-button').textContent = '[ Refazer ]';
+                    const buttonContainer = targetDiv.nextElementSibling;
+                    buttonContainer.querySelector('button').textContent = '[ Refazer ]';
                     
                     signatureModal.classList.add('hidden');
                 }
