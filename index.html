@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ficha de Vistoria Veicular Interativa</title>
+    <title>Ficha de Vistoria Veicular Interativa 2</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/signature_pad/1.5.3/signature_pad.min.js"></script>
     <!-- Chosen Palette: Warm Neutrals -->
@@ -35,18 +35,6 @@
             border-radius: 0.5rem;
             cursor: crosshair;
         }
-        .signature-container {
-            position: relative;
-        }
-        .signature-display {
-	/* Tamanho da Assinatura View*/
-            position: absolute;
-            bottom: 2rem; /* Position above the line */
-            left: 0;
-            right: 0;
-            height: 6rem; 
-            pointer-events: none; /* Allow clicking through */
-        }
         @media print {
             @page {
                 size: A4 portrait;
@@ -75,21 +63,21 @@
                 display: block !important;
             }
             main.print-area > * {
-                margin: 0 0 0.4rem 0 !important;
+                margin: 0 0 0.3rem 0 !important;
             }
             #print-header-placeholder {
                 display: block !important;
                 margin-bottom: 0.4rem !important;
             }
             .print-area section, .print-area footer {
-                padding: 0.4rem !important;
+                padding: 0.3rem !important;
                 box-shadow: none !important;
                 border: 1px solid #ccc;
                 break-inside: avoid;
             }
             .print-area footer {
                 border: none !important;
-                padding-top: 0.5rem !important;
+                padding-top: 0.4rem !important;
             }
             .print-area h2 { font-size: 10pt; margin-bottom: 0.2rem; padding-bottom: 0.2rem; }
             .print-area h3 { font-size: 9pt; }
@@ -146,14 +134,12 @@
                 min-height: 130px !important;
             }
             #responsaveis .signature-block {
-                margin-top: 2rem !important;
+                margin-top: 1rem !important;
             }
             #local-data-inputs { display: none; }
             #local-data-print { display: block !important; }
             .signature-display {
-		/* Assinatura tamanho */
-                height: 6rem !important;
-                bottom: 2rem !important;
+                height: 4rem !important;
             }
         }
     </style>
@@ -247,14 +233,13 @@
                             <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Luz de freio</label>
                             <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Luz da placa</label>
                             <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Velocímetro</label>
-                            
                         </div>
 
                         <div class="space-y-3">
                             <h3 class="font-semibold text-gray-700">Estado de Conservação</h3>
                             <label class="flex items-center"><input type="text" class="mr-2 w-20 p-1 border rounded text-xs"> Pneus</label>
                             <label class="flex items-center"><input type="text" class="mr-2 w-20 p-1 border rounded text-xs"> Estepe</label>
-			    <label class="flex items-center"><input type="text" class="mr-2 w-20 p-1 border rounded text-xs"> Estado dos bancos</label>
+                            <label class="flex items-center"><input type="text" class="mr-2 w-20 p-1 border rounded text-xs"> Estado dos bancos</label>
                             <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Extintor de incêndio</label>
                             <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Cintos de segurança</label>
                             <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Macaco</label>
