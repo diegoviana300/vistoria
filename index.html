@@ -35,9 +35,17 @@
             border-radius: 0.5rem;
             cursor: crosshair;
         }
+        .signature-container {
+            position: relative;
+        }
         .signature-display {
-            height: 4rem; /* 64px */
-            margin-bottom: 0.5rem;
+	/* Tamanho da Assinatura View*/
+            position: absolute;
+            bottom: 2rem; /* Position above the line */
+            left: 0;
+            right: 0;
+            height: 6rem; 
+            pointer-events: none; /* Allow clicking through */
         }
         @media print {
             @page {
@@ -143,7 +151,9 @@
             #local-data-inputs { display: none; }
             #local-data-print { display: block !important; }
             .signature-display {
-                height: 3rem !important;
+		/* Assinatura tamanho */
+                height: 6rem !important;
+                bottom: 2rem !important;
             }
         }
     </style>
@@ -195,7 +205,7 @@
                         
                         <div class="space-y-3">
                             <h3 class="font-semibold text-gray-700">Itens do Veículo</h3>
-                            <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">CRLV - ANO</label>
+                            <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">CRLV</label>
                             <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Manual</label>
                             <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Chave Reserva</label>
                             <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">TAG</label>
@@ -222,7 +232,7 @@
                         </div>
                         
                         <div class="space-y-3">
-                            <h3 class="font-semibold text-gray-700">Func. Parte Elétrica</h3>
+                            <h3 class="font-semibold text-gray-700">Funcionamento</h3>
                             <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Retrovisores</label>
                             <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Buzina</label>
                             <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Limpador de para-brisa</label>
@@ -237,13 +247,14 @@
                             <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Luz de freio</label>
                             <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Luz da placa</label>
                             <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Velocímetro</label>
-                            <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Temperatura</label>
+                            
                         </div>
 
                         <div class="space-y-3">
                             <h3 class="font-semibold text-gray-700">Estado de Conservação</h3>
                             <label class="flex items-center"><input type="text" class="mr-2 w-20 p-1 border rounded text-xs"> Pneus</label>
                             <label class="flex items-center"><input type="text" class="mr-2 w-20 p-1 border rounded text-xs"> Estepe</label>
+			    <label class="flex items-center"><input type="text" class="mr-2 w-20 p-1 border rounded text-xs"> Estado dos bancos</label>
                             <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Extintor de incêndio</label>
                             <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Cintos de segurança</label>
                             <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Macaco</label>
@@ -254,7 +265,6 @@
                             <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Freio de estacionamento</label>
                             <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Vazamentos de óleo</label>
                             <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Acendedor de cigarros</label>
-                            <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Estado dos bancos</label>
                             <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Escapamentos</label>
                         </div>
                     </div>
@@ -303,15 +313,15 @@
                  <div class="mt-12 signature-block">
                     <p class="font-semibold text-sm mb-2">Assinaturas:</p>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                         <div>
-                            <div id="signature-display-vistoriador" class="signature-display w-full flex items-center justify-center"></div>
+                         <div class="signature-container">
+                            <div id="signature-display-vistoriador" class="signature-display"></div>
                             <div class="border-t-2 border-gray-400 pt-2 text-center text-sm text-gray-600">
                                 Assinatura do Vistoriador
                                 <button class="ml-2 text-blue-600 hover:underline text-xs no-print" onclick="openSignatureModal('vistoriador')">[ Assinar ]</button>
                             </div>
                          </div>
-                         <div>
-                            <div id="signature-display-proprietario" class="signature-display w-full flex items-center justify-center"></div>
+                         <div class="signature-container">
+                            <div id="signature-display-proprietario" class="signature-display"></div>
                             <div class="border-t-2 border-gray-400 pt-2 text-center text-sm text-gray-600">
                                 Assinatura do Proprietário/Possuidor
                                 <button class="ml-2 text-blue-600 hover:underline text-xs no-print" onclick="openSignatureModal('proprietario')">[ Assinar ]</button>
@@ -398,7 +408,7 @@
             const closeSignatureBtn = document.getElementById('close-signature');
 
             signaturePad = new SignaturePad(canvas, {
-                backgroundColor: 'rgb(255, 255, 255)'
+                backgroundColor: 'rgba(255, 255, 255, 0)' // Transparent background
             });
 
             function resizeCanvas() {
@@ -431,14 +441,15 @@
                 if (signaturePad.isEmpty()) {
                     alert("Por favor, forneça uma assinatura.");
                 } else {
-                    const dataURL = signaturePad.toDataURL();
+                    const dataURL = signaturePad.toDataURL('image/png');
                     const targetDiv = document.getElementById(`signature-display-${currentSignatureTargetId}`);
-                    targetDiv.innerHTML = `<img src="${dataURL}" alt="Assinatura" class="mx-auto h-full object-contain"/>`;
+                    targetDiv.innerHTML = `<img src="${dataURL}" alt="Assinatura" class="mx-auto h-full object-contain signature-image"/>`;
                     
-                    const buttonContainer = targetDiv.nextElementSibling;
+                    const buttonContainer = targetDiv.parentElement.querySelector('.border-t-2');
                     buttonContainer.querySelector('button').textContent = '[ Refazer ]';
                     
                     signatureModal.classList.add('hidden');
+                    makeDraggable();
                 }
             });
 
@@ -508,6 +519,44 @@
                         damageList.appendChild(listItem);
                     });
                 }
+            }
+
+            function makeDraggable() {
+                const signatures = document.querySelectorAll('.signature-display');
+                signatures.forEach(signature => {
+                    let isDragging = false;
+                    let offsetX, offsetY;
+
+                    const startDrag = (e) => {
+                        isDragging = true;
+                        const clientX = e.clientX || e.touches[0].clientX;
+                        const clientY = e.clientY || e.touches[0].clientY;
+                        offsetX = clientX - signature.offsetLeft;
+                        offsetY = clientY - signature.offsetTop;
+                        signature.style.cursor = 'grabbing';
+                    };
+
+                    const drag = (e) => {
+                        if (!isDragging) return;
+                        e.preventDefault();
+                        const clientX = e.clientX || e.touches[0].clientX;
+                        const clientY = e.clientY || e.touches[0].clientY;
+                        signature.style.left = `${clientX - offsetX}px`;
+                        signature.style.top = `${clientY - offsetY}px`;
+                    };
+
+                    const stopDrag = () => {
+                        isDragging = false;
+                        signature.style.cursor = 'move';
+                    };
+
+                    signature.addEventListener('mousedown', startDrag);
+                    signature.addEventListener('touchstart', startDrag);
+                    document.addEventListener('mousemove', drag);
+                    document.addEventListener('touchmove', drag, { passive: false });
+                    document.addEventListener('mouseup', stopDrag);
+                    document.addEventListener('touchend', stopDrag);
+                });
             }
         });
 
