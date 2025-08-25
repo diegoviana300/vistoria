@@ -155,6 +155,13 @@
                 height: 6rem !important;
                 bottom: 2rem !important;
             }
+	    /* Adicione estas regras CSS no final da seção <style> */
+input[type="text"], 
+input[type="number"], 
+textarea {
+    text-transform: uppercase !important;
+}
+
         }
     </style>
 </head>
@@ -467,8 +474,7 @@
 
             let damages = [];
             let currentClickPosition = { x: 0, y: 0 };
-            const damageColors = ['#ef4444', '#3b82f6', '#22c55e', '#eab308', '#a855f7', '#f97316', '#14b8a6'];
-            let colorIndex = 0;
+            
 
             carDiagramContainer.addEventListener('click', function (e) {
                 const rect = carDiagramContainer.getBoundingClientRect();
@@ -489,17 +495,16 @@
             cancelDamageBtn.addEventListener('click', closeDamageModal);
 
             saveDamageBtn.addEventListener('click', function () {
-                const description = damageDescription.value.trim();
-                if (description) {
-                    const color = damageColors[colorIndex % damageColors.length];
-                    colorIndex++;
-                    damages.push({ ...currentClickPosition, description, color });
-                    renderDamages();
-                    closeDamageModal();
-                } else {
-                    damageError.classList.remove('hidden');
-                }
-            });
+    const description = damageDescription.value.trim();
+    if (description) {
+        const color = getRandomColor(); // <-- NOVA LINHA
+        damages.push({ ...currentClickPosition, description, color });
+        renderDamages();
+        closeDamageModal();
+    } else {
+        //...
+    }
+});
 
             function renderDamages() {
                 carDiagramContainer.querySelectorAll('.damage-marker').forEach(marker => marker.remove());
@@ -532,7 +537,16 @@
                 }
             }
 
-            function makeDraggable() {
+function getRandomColor() {
+    const letters = '0123456789ABCDEF';
+    let color = '#';
+    for (let i = 0; i < 6; i++) {
+        color += letters[Math.floor(Math.random() * 16)];
+    }
+    return color;
+}            
+
+function makeDraggable() {
                 const signatures = document.querySelectorAll('.signature-display');
                 signatures.forEach(signature => {
                     let isDragging = false;
