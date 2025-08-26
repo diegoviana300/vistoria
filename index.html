@@ -7,7 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/signature_pad/1.5.3/signature_pad.min.js"></script>
     <!-- Chosen Palette: Warm Neutrals -->
-    <!-- Application Structure Plan: A estrutura da aplicação foi desenhada como um formulário digital de página única, dividido em seções lógicas que seguem o fluxo do documento original (Identificação, Checklists, Avarias, Responsáveis). Esta abordagem foi escolhida por ser a mais intuitiva para um usuário que precisa preencher um relatório de forma sequencial. O principal elemento interativo é o diagrama de avarias, que transforma uma anotação textual em um registro visual e preciso, melhorando significantly a usabilidade e a qualidade da informação coletada. A aplicação culmina com ações claras (imprimir/limpar). -->
+    <!-- Application Structure Plan: A estrutura da aplicação foi desenhada como um formulário digital de página única, dividido em seções lógicas que seguem o fluxo do documento original (Identificação, Checklists, Avarias, Responsáveis). Esta abordagem foi escolhida por ser a mais intuitiva para um usuário que precisa preencher um relatório de forma sequencial. O principal elemento interativo é o diagrama de avarias, que transforma uma anotação textual em um registro visual e preciso, melhorando significativamente a usabilidade e a qualidade da informação coletada. A aplicação culmina com ações claras (imprimir/limpar). -->
     <!-- Visualization & Content Choices: Informação: Campos de texto e checkboxes (HTML padrão). Objetivo: Coleta de dados estruturados. Interação: Preenchimento padrão. Justificativa: Universalmente compreendido. | Informação: Avarias do veículo. Objetivo: Registrar danos espaciais. Apresentação: Imagem do veículo (IMG tag). Interação: Cliques na imagem abrem um modal para adicionar descrição, marcando o local exato com cores distintas. Justificativa: Utiliza a imagem fornecida pelo usuário para máxima fidelidade. -->
     <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <style>
@@ -46,12 +46,6 @@
             height: 4rem; /* 64px */
             pointer-events: none; /* Allow clicking through */
         }
-        input[type="text"],
-input[type="number"],
-textarea,
-#damage-list li { /* <-- Adicione esta linha */
-    text-transform: uppercase;
-}
         @media print {
             @page {
                 size: A4 portrait;
@@ -218,23 +212,11 @@ textarea,
             <section id="identificacao" class="bg-white p-6 rounded-lg shadow-md">
                 <h2 class="text-xl font-bold mb-4 border-b pb-2 sr-only">1. Identificação do Veículo</h2>
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-    <div>
-        <label class="block font-semibold text-sm mb-1">Operação/Autos n°</label>
-        <input type="text" class="w-full p-2 border rounded-md">
-    </div>
-    <div>
-        <label class="block font-semibold text-sm mb-1">Veículo</label>
-        <input type="text" class="w-full p-2 border rounded-md">
-    </div>
-    <div>
-        <label class="block font-semibold text-sm mb-1">Placa</label>
-        <input type="text" value="" class="w-full p-2 border rounded-md">
-    </div>
-    <div>
-        <label class="block font-semibold text-sm mb-1">KM</label>
-        <input type="number" class="w-full p-2 border rounded-md">
-    </div>
-</div>
+                    <input type="text" placeholder="Autos n." class="p-2 border rounded-md">
+                    <input type="text" placeholder="Veículo" class="p-2 border rounded-md">
+                    <input type="text" value="" placeholder="Placa" class="p-2 border rounded-md">
+                    <input type="number" placeholder="KM" class="p-2 border rounded-md">
+                </div>
             </section>
 
             <div id="main-content-grid" class="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -372,12 +354,12 @@ textarea,
             <section id="photo-gallery-section" class="bg-white p-6 rounded-lg shadow-md">
                 <h2 class="text-xl font-bold mb-4 border-b pb-2">6. Fotografias Anexadas</h2>
                 <div class="no-print">
-    <label for="photo-upload" class="inline-block bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors cursor-pointer">
-        Adicionar Fotos (Câmera ou Galeria)
-    </label>
-    <input type="file" id="photo-upload" multiple accept="image/*" class="hidden">
-    <p class="text-xs text-gray-500 mt-2">No celular, o sistema perguntará se deseja usar a câmera ou a galeria.</p>
-</div>
+                    <label for="photo-upload" class="inline-block bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors cursor-pointer">
+                        Adicionar Fotos
+                    </label>
+                    <input type="file" id="photo-upload" multiple accept="image/*" class="hidden">
+                    <p class="text-xs text-gray-500 mt-2">No celular, o sistema perguntará se deseja usar a câmera ou a galeria.</p>
+                </div>
                 <div id="photo-gallery-preview" class="mt-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 no-print">
                     <!-- Photo previews will be inserted here -->
                 </div>
@@ -428,24 +410,20 @@ textarea,
     </div>
 
     <div id="signature-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 hidden z-50">
-    <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-lg flex flex-col" style="height: 80vh; max-height: 500px;">
-        <h3 class="text-lg font-bold mb-4 text-center">
-            Desenhe a Assinatura 
-            <span class="text-red-600 font-bold">(Vire a tela na horizontal)</span>
-        </h3>
-        <div class="flex-grow w-full">
-            <canvas id="signature-pad" class="w-full h-full"></canvas>
-        </div>
-        <div class="mt-4 flex justify-between">
-            <button id="close-signature" class="bg-gray-200 text-gray-800 font-bold py-2 px-4 rounded-lg hover:bg-gray-300">Cancelar</button>
-            <div>
-                <button id="clear-signature" class="bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-lg hover:bg-gray-400">Limpar</button>
-                <button id="save-signature" class="bg-teal-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-teal-700">Salvar</button>
+        <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-lg flex flex-col" style="height: 80vh; max-height: 500px;">
+            <h3 class="text-lg font-bold mb-4">Desenhe a Assinatura</h3>
+            <div class="flex-grow w-full">
+                <canvas id="signature-pad" class="w-full h-full"></canvas>
+            </div>
+            <div class="mt-4 flex justify-between">
+                <button id="close-signature" class="bg-gray-200 text-gray-800 font-bold py-2 px-4 rounded-lg hover:bg-gray-300">Cancelar</button>
+                <div>
+                    <button id="clear-signature" class="bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-lg hover:bg-gray-400">Limpar</button>
+                    <button id="save-signature" class="bg-teal-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-teal-700">Salvar</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
-
 
     <script>
         let signaturePad;
@@ -635,33 +613,35 @@ textarea,
             }
 
             document.getElementById('photo-upload').addEventListener('change', function(event) {
-    const preview = document.getElementById('photo-gallery-preview');
-    const files = event.target.files;
+                const preview = document.getElementById('photo-gallery-preview');
+                const files = event.target.files;
 
-    for (const file of files) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            const wrapper = document.createElement('div');
-            wrapper.className = 'relative p-2 border rounded-lg shadow';
+                for (const file of files) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const wrapper = document.createElement('div');
+                        wrapper.className = 'relative p-2 border rounded-lg shadow';
 
-            const img = document.createElement('img');
-            img.src = e.target.result;
-            img.className = 'w-full h-auto object-cover rounded-lg';
-            
-            const removeBtn = document.createElement('button');
-            removeBtn.innerHTML = '&times;';
-            removeBtn.className = 'absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center font-bold';
-            removeBtn.onclick = function() {
-                wrapper.remove();
-            };
+                        const img = document.createElement('img');
+                        img.src = e.target.result;
+                        img.className = 'w-full h-auto object-cover rounded-lg';
+                        
+                        const removeBtn = document.createElement('button');
+                        removeBtn.innerHTML = '&times;';
+                        removeBtn.className = 'absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center font-bold';
+                        removeBtn.onclick = function() {
+                            wrapper.remove();
+                        };
 
-            wrapper.appendChild(img);
-            wrapper.appendChild(removeBtn);
-            preview.appendChild(wrapper);
-        }
-        reader.readAsDataURL(file);
-    }
-});
+                        wrapper.appendChild(img);
+                        wrapper.appendChild(removeBtn);
+                        preview.appendChild(wrapper);
+                    }
+                    reader.readAsDataURL(file);
+                }
+                event.target.value = '';
+            });
+        });
 
         function imprimir() {
             const cidade = document.getElementById('cidade-input').value || '________________';
