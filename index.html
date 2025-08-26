@@ -7,7 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/signature_pad/1.5.3/signature_pad.min.js"></script>
     <!-- Chosen Palette: Warm Neutrals -->
-    <!-- Application Structure Plan: A estrutura da aplicação foi desenhada como um formulário digital de página única, dividido em seções lógicas que seguem o fluxo do documento original (Identificação, Checklists, Avarias, Responsáveis). Esta abordagem foi escolhida por ser a mais intuitiva para um usuário que precisa preencher um relatório de forma sequencial. O principal elemento interativo é o diagrama de avarias, que transforma uma anotação textual em um registro visual e preciso, melhorando significativamente a usabilidade e a qualidade da informação coletada. A aplicação culmina com ações claras (imprimir/limpar). -->
+    <!-- Application Structure Plan: A estrutura da aplicação foi desenhada como um formulário digital de página única, dividido em seções lógicas que seguem o fluxo do documento original (Identificação, Checklists, Avarias, Responsáveis). Esta abordagem foi escolhida por ser a mais intuitiva para um usuário que precisa preencher um relatório de forma sequencial. O principal elemento interativo é o diagrama de avarias, que transforma uma anotação textual em um registro visual e preciso, melhorando significantly a usabilidade e a qualidade da informação coletada. A aplicação culmina com ações claras (imprimir/limpar). -->
     <!-- Visualization & Content Choices: Informação: Campos de texto e checkboxes (HTML padrão). Objetivo: Coleta de dados estruturados. Interação: Preenchimento padrão. Justificativa: Universalmente compreendido. | Informação: Avarias do veículo. Objetivo: Registrar danos espaciais. Apresentação: Imagem do veículo (IMG tag). Interação: Cliques na imagem abrem um modal para adicionar descrição, marcando o local exato com cores distintas. Justificativa: Utiliza a imagem fornecida pelo usuário para máxima fidelidade. -->
     <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <style>
@@ -39,13 +39,17 @@
             position: relative;
         }
         .signature-display {
-	/* Tamanho da Assinatura View*/
             position: absolute;
-            bottom: 2rem; /* Position above the line */
+            bottom: 1.25rem; /* Position above the line */
             left: 0;
             right: 0;
-            height: 6rem; 
+            height: 4rem; /* 64px */
             pointer-events: none; /* Allow clicking through */
+        }
+        input[type="text"],
+        input[type="number"],
+        textarea {
+            text-transform: uppercase;
         }
         @media print {
             @page {
@@ -151,17 +155,32 @@
             #local-data-inputs { display: none; }
             #local-data-print { display: block !important; }
             .signature-display {
-		/* Assinatura tamanho */
-                height: 6rem !important;
-                bottom: 2rem !important;
+                height: 3rem !important;
+                bottom: 1.5rem !important;
             }
-	    /* Adicione estas regras CSS no final da seção <style> */
-input[type="text"], 
-input[type="number"], 
-textarea {
-    text-transform: uppercase !important;
-}
-
+            #photo-gallery-section {
+                break-before: page; /* Start photos on a new page */
+            }
+            #photo-gallery-print {
+                display: grid !important;
+                grid-template-columns: 1fr 1fr;
+                gap: 1rem;
+            }
+            #photo-gallery-print .photo-print-item {
+                display: flex;
+                flex-direction: column;
+                border: 1px solid #ccc;
+                padding: 0.25rem;
+                break-inside: avoid;
+            }
+            #photo-gallery-print img {
+                width: 100%;
+            }
+            #photo-gallery-print p {
+                text-align: center;
+                font-weight: bold;
+                margin-top: 0.25rem;
+            }
         }
     </style>
 </head>
@@ -337,6 +356,27 @@ textarea {
                 </div>
             </section>
 
+            <section id="photo-gallery-section" class="bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-xl font-bold mb-4 border-b pb-2">6. Fotografias Anexadas</h2>
+                <div class="no-print flex flex-wrap gap-2">
+                    <label for="camera-upload" class="inline-block bg-blue-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors cursor-pointer">
+                        Tirar Foto
+                    </label>
+                    <input type="file" id="camera-upload" accept="image/*" capture="environment" class="hidden">
+                    
+                    <label for="gallery-upload" class="inline-block bg-gray-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-gray-700 transition-colors cursor-pointer">
+                        Escolher da Galeria
+                    </label>
+                    <input type="file" id="gallery-upload" multiple accept="image/*" class="hidden">
+                </div>
+                <div id="photo-gallery-preview" class="mt-4 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 no-print">
+                    <!-- Photo previews will be inserted here -->
+                </div>
+                <div id="photo-gallery-print" class="hidden">
+                    <!-- Cloned photos for printing will be inserted here -->
+                </div>
+            </section>
+
             <footer class="mt-4 text-sm text-gray-700">
                 <div class="text-center mb-4">
                     <div id="local-data-inputs" class="flex items-center justify-center gap-2">
@@ -378,25 +418,21 @@ textarea {
         </div>
     </div>
 
-   <div id="signature-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 hidden z-50">
-    <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-lg flex flex-col" style="height: 80vh; max-height: 500px;">
-        <h3 class="text-lg font-bold mb-4 text-center">
-            Desenhe a Assinatura 
-            <span class="text-red-600 font-bold">(Vire a tela na horizontal)</span>
-        </h3>
-        <div class="flex-grow w-full">
-            <canvas id="signature-pad" class="w-full h-full"></canvas>
-        </div>
-        <div class="mt-4 flex justify-between">
-            <button id="close-signature" class="bg-gray-200 text-gray-800 font-bold py-2 px-4 rounded-lg hover:bg-gray-300">Cancelar</button>
-            <div>
-                <button id="clear-signature" class="bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-lg hover:bg-gray-400">Limpar</button>
-                <button id="save-signature" class="bg-teal-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-teal-700">Salvar</button>
+    <div id="signature-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 hidden z-50">
+        <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-lg flex flex-col" style="height: 80vh; max-height: 500px;">
+            <h3 class="text-lg font-bold mb-4">Desenhe a Assinatura</h3>
+            <div class="flex-grow w-full">
+                <canvas id="signature-pad" class="w-full h-full"></canvas>
+            </div>
+            <div class="mt-4 flex justify-between">
+                <button id="close-signature" class="bg-gray-200 text-gray-800 font-bold py-2 px-4 rounded-lg hover:bg-gray-300">Cancelar</button>
+                <div>
+                    <button id="clear-signature" class="bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-lg hover:bg-gray-400">Limpar</button>
+                    <button id="save-signature" class="bg-teal-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-teal-700">Salvar</button>
+                </div>
             </div>
         </div>
     </div>
-</div>
-
 
     <script>
         let signaturePad;
@@ -432,10 +468,12 @@ textarea {
             
             window.addEventListener("orientationchange", function() {
                 if (!signatureModal.classList.contains('hidden')) {
-                    closeSignatureBtn.click();
+                    // Close and reopen the modal to force a resize
+                    signatureModal.classList.add('hidden');
                     setTimeout(() => {
-                        openSignatureModal(currentSignatureTargetId);
-                    }, 100); // A small delay to ensure the orientation change is complete
+                        signatureModal.classList.remove('hidden');
+                        resizeCanvas();
+                    }, 100);
                 }
             });
 
@@ -475,6 +513,14 @@ textarea {
             let damages = [];
             let currentClickPosition = { x: 0, y: 0 };
             
+            function getRandomColor() {
+                const letters = '0123456789ABCDEF';
+                let color = '#';
+                for (let i = 0; i < 6; i++) {
+                    color += letters[Math.floor(Math.random() * 16)];
+                }
+                return color;
+            }
 
             carDiagramContainer.addEventListener('click', function (e) {
                 const rect = carDiagramContainer.getBoundingClientRect();
@@ -495,16 +541,16 @@ textarea {
             cancelDamageBtn.addEventListener('click', closeDamageModal);
 
             saveDamageBtn.addEventListener('click', function () {
-    const description = damageDescription.value.trim();
-    if (description) {
-        const color = getRandomColor(); // <-- NOVA LINHA
-        damages.push({ ...currentClickPosition, description, color });
-        renderDamages();
-        closeDamageModal();
-    } else {
-        //...
-    }
-});
+                const description = damageDescription.value.trim();
+                if (description) {
+                    const color = getRandomColor();
+                    damages.push({ ...currentClickPosition, description, color });
+                    renderDamages();
+                    closeDamageModal();
+                } else {
+                    damageError.classList.remove('hidden');
+                }
+            });
 
             function renderDamages() {
                 carDiagramContainer.querySelectorAll('.damage-marker').forEach(marker => marker.remove());
@@ -537,16 +583,7 @@ textarea {
                 }
             }
 
-function getRandomColor() {
-    const letters = '0123456789ABCDEF';
-    let color = '#';
-    for (let i = 0; i < 6; i++) {
-        color += letters[Math.floor(Math.random() * 16)];
-    }
-    return color;
-}            
-
-function makeDraggable() {
+            function makeDraggable() {
                 const signatures = document.querySelectorAll('.signature-display');
                 signatures.forEach(signature => {
                     let isDragging = false;
@@ -572,7 +609,7 @@ function makeDraggable() {
 
                     const stopDrag = () => {
                         isDragging = false;
-                        signature.style.cursor = 'move';Proprietário/possuidor:Proprietário/possuidor:Proprietário/possuidor:Proprietário/possuidor:Proprietário/possuidor:Proprietário/possuidor:Proprietário/possuidor:Proprietário/possuidor:Proprietário/possuidor:Proprietário/possuidor:Proprietário/possuidor:Proprietário/possuidor:Proprietário/possuidor:Proprietário/possuidor:Proprietário/possuidor:Proprietário/possuidor:Proprietário/possuidor:Proprietário/possuidor:Proprietário/possuidor:Proprietário/possuidor:Proprietário/possuidor:Proprietário/possuidor:Proprietário/possuidor:Proprietário/possuidor:Proprietário/possuidor:Proprietário/possuidor:Proprietário/possuidor:Proprietário/possuidor:
+                        signature.style.cursor = 'move';
                     };
 
                     signature.addEventListener('mousedown', startDrag);
@@ -583,6 +620,38 @@ function makeDraggable() {
                     document.addEventListener('touchend', stopDrag);
                 });
             }
+
+            const photoUploads = [document.getElementById('camera-upload'), document.getElementById('gallery-upload')];
+            photoUploads.forEach(upload => {
+                upload.addEventListener('change', function(event) {
+                    const preview = document.getElementById('photo-gallery-preview');
+                    const files = event.target.files;
+
+                    for (const file of files) {
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            const wrapper = document.createElement('div');
+                            wrapper.className = 'relative p-2 border rounded-lg shadow';
+
+                            const img = document.createElement('img');
+                            img.src = e.target.result;
+                            img.className = 'w-full h-auto object-cover rounded-lg';
+                            
+                            const removeBtn = document.createElement('button');
+                            removeBtn.innerHTML = '&times;';
+                            removeBtn.className = 'absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center font-bold';
+                            removeBtn.onclick = function() {
+                                wrapper.remove();
+                            };
+
+                            wrapper.appendChild(img);
+                            wrapper.appendChild(removeBtn);
+                            preview.appendChild(wrapper);
+                        }
+                        reader.readAsDataURL(file);
+                    }
+                });
+            });
         });
 
         function imprimir() {
@@ -596,6 +665,21 @@ function makeDraggable() {
             
             document.getElementById('cidade-print').textContent = cidade;
             document.getElementById('data-print').textContent = dataFormatada;
+
+            const preview = document.getElementById('photo-gallery-preview');
+            const printGallery = document.getElementById('photo-gallery-print');
+            printGallery.innerHTML = ''; // Clear previous photos
+            const images = preview.querySelectorAll('img');
+            images.forEach((img, index) => {
+                const item = document.createElement('div');
+                item.className = 'photo-print-item';
+                const imgClone = img.cloneNode();
+                const title = document.createElement('p');
+                title.textContent = `Foto ${index + 1}`;
+                item.appendChild(imgClone);
+                item.appendChild(title);
+                printGallery.appendChild(item);
+            });
             
             window.print();
         }
