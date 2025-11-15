@@ -112,6 +112,11 @@ textarea,
             gap: 0.4rem !important;
             }
 
+            #responsaveis-inputs-grid > :not([hidden]) ~ :not([hidden]) {
+                border-top-width: 0 !important;
+                border-left-width: 0 !important;
+            }
+
             #observacoes-textarea.no-print {
                 display: none !important;
             }
@@ -308,22 +313,16 @@ textarea,
                         
                         <div class="space-y-3">
                             <h3 class="font-semibold text-gray-700">Funcionamento</h3>
-                            <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Retrovisores</label>
                             <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Buzina</label>
-                            <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Limpador de para-brisa</label>
-                            <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Esguicho</label>
-                            <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Luz interna</label>
+							 <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Pisca-alerta</label>
                             <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Luz do painel</label>
                             <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Luz alta</label>
                             <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Luz baixa</label>
-                            <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Luz de ré</label>
-                            <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Pisca-alerta/pisca-pisca</label>
-                            <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Faróis</label>
-                            <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Luz de freio</label>
+                            <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Luz de neblina</label>
+							<label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Luz de ré</label>
+							<label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Luz de freio</label>
                             <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Luz da placa</label>
-                            <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Velocímetro</label>
                             <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Ar Condicionado</label>
-                            <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Luzes Advert. (Painel)</label>
                         </div>
 
                         <div class="space-y-3">
@@ -338,7 +337,7 @@ textarea,
                             <label class="flex items-center"><input type="text" class="mr-2 w-20 p-1 border rounded text-xs"> Pneus</label>
                             <label class="flex items-center"><input type="text" class="mr-2 w-20 p-1 border rounded text-xs"> Estepe</label>
                             <label class="flex items-center"><input type="text" class="mr-2 w-20 p-1 border rounded text-xs"> Estado dos bancos</label> 
-                            
+                          
                             
                         </div>
                     </div>
@@ -365,14 +364,14 @@ textarea,
             
             <section id="observacoes" class="bg-white p-6 rounded-lg shadow-md">
                 <h2 class="text-xl font-bold mb-4 border-b pb-2">4. Observações Gerais</h2>
-                <textarea id="observacoes-textarea" placeholder="Digite aqui quaisquer observações adicionais..." class="w-full p-2 border rounded-md h-24 no-print"></textarea>
+                <textarea id="observacoes-textarea" placeholder="Ex.: Apreendido Operação xxx; Luz injeção eletrônica acesa..." class="w-full p-2 border rounded-md h-24 no-print"></textarea>
                 
                 <div id="observacoes-print" class="hidden"></div>
             </section>
 
             <section id="responsaveis" class="bg-white p-6 rounded-lg shadow-md">
                 <h2 class="text-xl font-bold mb-4 border-b pb-2">5. Responsáveis</h2>
-                <div id="responsaveis-inputs-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div id="responsaveis-inputs-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6 divide-y md:divide-y-0 md:divide-x divide-gray-300">
                     <div>
                         <label class="block font-semibold text-sm mb-1">Policial responsável/vistoriador:</label>
                         <input type="text" value="" class="w-full p-2 border rounded-md mb-2">
