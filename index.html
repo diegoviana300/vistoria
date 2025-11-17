@@ -12,31 +12,48 @@
 
     <div class="container mx-auto max-w-7xl p-4 sm:p-6 lg:p-8">
 
-        <header class="mb-8 no-print">
-            <div class="flex items-center">
-                <img src="imagem/logo_mpsc.png" alt="Logo MPSC" class="h-16 mr-4">
-            </div>
-            <div class="text-center border-t border-b border-gray-400 py-1 mt-2">
-                <p class="text-sm font-semibold text-gray-700">GRUPO DE ATUAÇÃO ESPECIAL DE COMBATE ÀS ORGANIZAÇÕES CRIMINOSAS - GAECO</p>
-                <p class="text-xs text-gray-600">GRUPO REGIONAL DE ITAJAÍ</p>
-            </div>
-            <h1 class="text-2xl font-bold text-gray-900 text-center mt-4">Ficha de Vistoria Veicular</h1>
-        </header>
+<header class="mb-8 no-print">
+    <div class="flex items-center justify-between">
+        <div class="flex items-center">
+            <img id="header-logo" src="imagem/logo_mpsc.png" alt="Logo MPSC" class="h-16 mr-4">
+        </div>
+        <button id="config-button" type="button"
+            class="inline-flex items-center justify-center rounded-full p-2 border border-gray-300 text-gray-600 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-teal-500"
+            title="Configurações">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"
+                aria-hidden="true">
+                <path
+                    d="M11.983 1.447a1 1 0 00-1.966 0l-.253 1.518a5.53 5.53 0 00-1.363.79L6.02 3.18a1 1 0 00-1.32.083L3.263 4.7a1 1 0 00.083 1.32l1.575 1.381a5.55 5.55 0 000 1.598L3.346 10.38a1 1 0 00-.083 1.32l1.437 1.437a1 1 0 001.32.083l1.381-1.575c.43.27.89.49 1.363.79l.253 1.518a1 1 0 001.966 0l.253-1.518a5.53 5.53 0 001.363-.79l1.381 1.575a1 1 0 001.32-.083l1.437-1.437a1 1 0 00-.083-1.32l-1.575-1.381c.06-.53.06-1.068 0-1.598l1.575-1.381a1 1 0 00.083-1.32L16.02 3.18a1 1 0 00-1.32-.083l-1.381 1.575a5.53 5.53 0 00-1.363-.79l-.253-1.518zM10 8a2 2 0 110 4 2 2 0 010-4z" />
+            </svg>
+        </button>
+    </div>
+    <div class="text-center border-t border-b border-gray-400 py-1 mt-2">
+        <p id="inst-nome" class="text-sm font-semibold text-gray-700">
+            GRUPO DE ATUAÇÃO ESPECIAL DE COMBATE ÀS ORGANIZAÇÕES CRIMINOSAS - GAECO
+        </p>
+        <p id="regional-nome" class="text-xs text-gray-600">GRUPO REGIONAL DE ITAJAÍ</p>
+    </div>
+    <h1 class="text-2xl font-bold text-gray-900 text-center mt-4">Ficha de Vistoria Veicular</h1>
+</header>
+
 
         <main class="space-y-6 print-area">
 
-            <div id="print-header-placeholder" class="hidden">
-                <div class="text-center">
-                    <div class="flex items-center">
-                        <img src="imagem/logo_mpsc.png" alt="Logo MPSC" class="h-12 mr-4">
-                    </div>
-                    <div class="border-t border-b border-gray-400 py-1 mt-2 text-xs">
-                        <p class="font-semibold">GRUPO DE ATUAÇÃO ESPECIAL DE COMBATE ÀS ORGANIZAÇÕES CRIMINOSAS - GAECO</p>
-                        <p>GRUPO REGIONAL DE ITAJAÍ</p>
-                    </div>
-                    <h1 class="text-lg font-bold text-center mt-2 mb-2">FICHA DE VISTORIA VEICULAR</h1>
-                </div>
-            </div>
+<div id="print-header-placeholder" class="hidden">
+    <div class="text-center">
+        <div class="flex items-center">
+            <img id="print-header-logo" src="imagem/logo_mpsc.png" alt="Logo MPSC" class="h-12 mr-4">
+        </div>
+        <div class="border-t border-b border-gray-400 py-1 mt-2 text-xs">
+            <p id="print-inst-nome" class="font-semibold">
+                GRUPO DE ATUAÇÃO ESPECIAL DE COMBATE ÀS ORGANIZAÇÕES CRIMINOSAS - GAECO
+            </p>
+            <p id="print-regional-nome">GRUPO REGIONAL DE ITAJAÍ</p>
+        </div>
+        <h1 class="text-lg font-bold text-center mt-2 mb-2">FICHA DE VISTORIA VEICULAR</h1>
+    </div>
+</div>
+
 
             <section id="identificacao" class="bg-white p-6 rounded-lg shadow-md">
                 <h2 class="text-xl font-bold mb-4 border-b pb-2 sr-only">1. Identificação do Veículo</h2>
@@ -223,27 +240,28 @@
                 </div>
             </section>
 
-            <footer class="mt-4 text-sm text-gray-700">
-                <div class="text-center mb-4">
-                    <div id="local-data-inputs" class="flex items-center justify-center gap-2">
-                        <strong>Local e data da apreensão:</strong>
-                        <input id="cidade-input" type="text" placeholder="Cidade" class="w-48 p-1 border rounded-md text-sm">,
-                        <input id="data-input" type="date" class="p-1 border rounded-md text-sm">
-                    </div>
-                    <p id="local-data-print" class="hidden">
-                        <strong>Local e data da apreensão:</strong> <span id="cidade-print"></span>, <span id="data-print"></span>
-                    </p>
-                </div>
-                <div class="flex justify-between items-center border-t-2 border-gray-400 pt-4">
-                    <div class="text-left text-xs text-gray-500">
-                        <p>Rua Brusque, nº 1224, Centro, Itajaí - SC, CEP 88.303-001</p>
-                        <p>E-mail: gaecoitajai@mpsc.mp.br</p>
-                    </div>
-                    <div class="flex items-center space-x-2">
-                        <img src="imagem/gaeco2.bmp" alt="Logos" class="h-10">
-                    </div>
-                </div>
-            </footer>
+<footer class="mt-4 text-sm text-gray-700">
+    <div class="text-center mb-4">
+        <div id="local-data-inputs" class="flex items-center justify-center gap-2">
+            <strong>Local e data da apreensão:</strong>
+            <input id="cidade-input" type="text" placeholder="Cidade" class="w-48 p-1 border rounded-md text-sm">,
+            <input id="data-input" type="date" class="p-1 border rounded-md text-sm">
+        </div>
+        <p id="local-data-print" class="hidden">
+            <strong>Local e data da apreensão:</strong> <span id="cidade-print"></span>, <span id="data-print"></span>
+        </p>
+    </div>
+    <div class="flex justify-between items-center border-t-2 border-gray-400 pt-4">
+        <div class="text-left text-xs text-gray-500">
+            <p id="footer-endereco">Rua Brusque, nº 1224, Centro, Itajaí - SC, CEP 88.303-001</p>
+            <p id="footer-email">E-mail: gaecoitajai@mpsc.mp.br</p>
+        </div>
+        <div class="flex items-center space-x-2">
+            <img id="footer-logo" src="imagem/gaeco2.bmp" alt="Logos" class="h-10">
+        </div>
+    </div>
+</footer>
+
         </main>
 
         <div class="mt-8 text-center space-x-2 sm:space-x-4 no-print">
@@ -279,6 +297,50 @@
                 <button id="clear-signature" class="bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded-lg hover:bg-gray-400">Limpar</button>
                 <button id="save-signature" class="bg-teal-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-teal-700">Salvar</button>
             </div>
+        </div>
+    </div>
+</div>
+<div id="config-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 hidden z-50">
+    <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-md">
+        <h3 class="text-lg font-bold mb-4 text-center">Configurações da Ficha</h3>
+        <div class="space-y-4">
+            <div>
+                <label for="config-grupo" class="block text-sm font-semibold mb-1">Grupo regional</label>
+                <select id="config-grupo" class="w-full p-2 border rounded-md text-sm">
+                    <!-- opções serão preenchidas via JS -->
+                </select>
+            </div>
+            <div>
+                <label for="config-header-logo" class="block text-sm font-semibold mb-1">
+                    Logo do cabeçalho (caminho ou URL)
+                </label>
+                <input id="config-header-logo" type="text" class="w-full p-2 border rounded-md text-sm"
+                    placeholder="Ex.: imagem/logo_mpsc.png">
+            </div>
+            <div>
+                <label for="config-footer-logo" class="block text-sm font-semibold mb-1">
+                    Logo do rodapé (caminho ou URL)
+                </label>
+                <input id="config-footer-logo" type="text" class="w-full p-2 border rounded-md text-sm"
+                    placeholder="Ex.: imagem/gaeco2.bmp">
+            </div>
+            <div>
+                <label for="config-inst-nome" class="block text-sm font-semibold mb-1">
+                    Nome da instituição (linha superior)
+                </label>
+                <input id="config-inst-nome" type="text" class="w-full p-2 border rounded-md text-sm"
+                    placeholder="GRUPO DE ATUAÇÃO ESPECIAL DE COMBATE ÀS ORGANIZAÇÕES CRIMINOSAS - GAECO">
+            </div>
+        </div>
+        <div class="mt-6 flex justify-end space-x-2">
+            <button id="config-cancel"
+                class="bg-gray-200 text-gray-800 font-semibold py-2 px-4 rounded-lg hover:bg-gray-300 text-sm">
+                Cancelar
+            </button>
+            <button id="config-save"
+                class="bg-teal-600 text-white font-semibold py-2 px-4 rounded-lg hover:bg-teal-700 text-sm">
+                Salvar
+            </button>
         </div>
     </div>
 </div>
