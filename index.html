@@ -6,226 +6,12 @@
     <title>Ficha de Vistoria Veicular Interativa</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/signature_pad/1.5.3/signature_pad.min.js"></script>
-    <!-- Chosen Palette: Warm Neutrals -->
-    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-        body {
-            font-family: 'Inter', sans-serif;
-        }
-        .damage-marker {
-            position: absolute;
-            width: 16px;
-            height: 16px;
-            border: 2px solid white;
-            box-shadow: 0 0 5px rgba(0,0,0,0.5);
-            border-radius: 50%;
-            transform: translate(-50%, -50%);
-            cursor: pointer;
-            transition: transform 0.2s;
-            z-index: 10;
-        }
-        .damage-marker:hover {
-            transform: translate(-50%, -50%) scale(1.2);
-        }
-        #signature-pad {
-            border: 2px dashed #ccc;
-            border-radius: 0.5rem;
-            cursor: crosshair;
-        }
-        .signature-container {
-            position: relative;
-        }
-        .signature-display {
-            position: absolute;
-            bottom: 1.25rem; /* Position above the line */
-            left: 0;
-            right: 0;
-            height: 4rem; /* 64px */
-            pointer-events: none; /* Allow clicking through */
-        }
-input[type="text"],
-input[type="number"],
-textarea,
-#damage-list li { /* <-- Adicione esta linha */
-    text-transform: uppercase;
-}
-
-        @media print {
-            @page {
-                size: A4 portrait;
-                margin: 1cm;
-            }
-            html, body {
-                width: 210mm;
-                height: 297mm;
-                font-size: 9pt;
-            }
-            body {
-                -webkit-print-color-adjust: exact !important;
-                print-color-adjust: exact !important;
-            }
-            .no-print { display: none !important; }
-            .print-area, .print-area * { visibility: visible; }
-            .print-area {
-                position: absolute;
-                left: 0;
-                top: 0;
-                width: 100%;
-                box-shadow: none !important;
-                border: none !important;
-            }
-            main.print-area {
-                display: block !important;
-            }
-            main.print-area > * {
-                margin: 0 0 0.4rem 0 !important;
-            }
-            #print-header-placeholder {
-                display: block !important;
-                margin-bottom: 0.4rem !important;
-            }
-            .print-area section, .print-area footer {
-                padding: 0.4rem !important;
-                box-shadow: none !important;
-                border: 1px solid #ccc;
-                break-inside: avoid;
-            }
-            .print-area footer {
-                border: none !important;
-                padding-top: 0.5rem !important;
-            }
-            .print-area h2 { font-size: 10pt; margin-bottom: 0.2rem; padding-bottom: 0.2rem; }
-            .print-area h3 { font-size: 9pt; }
-            .print-area h4, .print-area p, .print-area label, .print-area li, .print-area span, .print-area input, .print-area textarea {
-                font-size: 8pt;
-            }
-            .print-area input, .print-area textarea { padding: 2px 4px; }
-            
-            
-            #main-content-grid {
-                display: block !important;
-            }
-            
-            #identificacao .grid {
-            display: grid !important;
-            gap: 0.4rem !important;
-            }
-
-            #responsaveis-inputs-grid > :not([hidden]) ~ :not([hidden]) {
-                border-top-width: 0 !important;
-                border-left-width: 0 !important;
-            }
-
-            #observacoes-textarea.no-print {
-                display: none !important;
-            }
-
-            /* 2. Mostra e formata o DIV de observações para print */
-            #observacoes-print {
-                display: block !important;
-                font-size: 8pt;
-                min-height: 2.5rem; /* Terá uma altura mínima, mas vai crescer conforme o texto */
-                padding: 4px 6px;
-                border: 1px solid #ccc; /* Mantém a aparência de um campo */
-                border-radius: 0.25rem;
-                background: #fff; /* Fundo branco para garantir */
-                
-                /* Essas duas linhas são essenciais para manter as quebras de linha e o formato do texto */
-                white-space: pre-wrap;
-                word-wrap: break-word;
-            }
-
-            #identificacao .grid {
-                grid-template-columns: repeat(4, 1fr) !important;
-            }
-             #responsaveis-inputs-grid, #responsaveis-signatures-grid {
-    display: grid !important; /* Garante o display */
-    grid-template-columns: repeat(3, 1fr) !important;
-    gap: 0.2rem !important; /* Diminui o gap para caber as 3 colunas */
-}
-
-#responsaveis .signature-block {
-    margin-top: 1.5rem !important; /* Margem menor no print */
-}
-
-.signature-display {
-    height: 2.5rem !important; /* Assinaturas menores no print */
-    bottom: 1.5rem !important;
-}
-            
-            #checklists .grid {
-                grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
-                gap: 0.4rem !important;
-            }
-            #checklists .space-y-3 > :not([hidden]) ~ :not([hidden]) {
-                margin-top: 0.15rem !important;
-                margin-bottom: 0 !important;
-            }
-            #checklists .pt-2 {
-                padding-top: 0.2rem !important;
-            }
-
-            #avarias p { margin-bottom: 0.4rem !important; }
-            #avarias .flex-container-for-print {
-                display: flex !important;
-                flex-direction: row !important;
-                gap: 0.5rem !important;
-                align-items: flex-start !important;
-            }
-            #car-diagram-container {
-                width: 65% !important;
-                padding: 0 !important;
-                margin: 0 !important;
-            }
-            #damage-list-container {
-                width: 35% !important;
-                margin: 0 !important;
-            }
-	    
-            #responsaveis .signature-block {
-                margin-top: 2rem !important;
-            }
-            #local-data-inputs { display: none; }
-            #local-data-print { display: block !important; }
-            .signature-display {
-                height: 3rem !important;
-                bottom: 1.5rem !important;
-            }
-            #photo-gallery-section {
-                break-before: page; /* Start photos on a new page */
-            }
-            #photo-gallery-print {
-                display: grid !important;
-                grid-template-columns: 1fr 1fr;
-                gap: 1rem;
-            }
-            #photo-gallery-print .photo-print-item {
-                display: flex;
-                flex-direction: column;
-                border: 1px solid #ccc;
-                padding: 0.25rem;
-                break-inside: avoid;
-            }
-            #photo-gallery-print img {
-                width: 100%;
-            }
-		
-            #photo-gallery-print p {
-                text-align: center;
-                font-weight: bold;
-                margin-top: 0.25rem;
-            }
-			#cidade-print {
-        text-transform: uppercase;
-    }
-        }
-    </style>
+    <link rel="stylesheet" href="css/styles.css">
 </head>
 <body class="bg-stone-100 text-gray-800">
 
     <div class="container mx-auto max-w-7xl p-4 sm:p-6 lg:p-8">
-        
+
         <header class="mb-8 no-print">
             <div class="flex items-center">
                 <img src="imagem/logo_mpsc.png" alt="Logo MPSC" class="h-16 mr-4">
@@ -238,7 +24,7 @@ textarea,
         </header>
 
         <main class="space-y-6 print-area">
-            
+
             <div id="print-header-placeholder" class="hidden">
                 <div class="text-center">
                     <div class="flex items-center">
@@ -278,7 +64,7 @@ textarea,
                 <section id="checklists" class="bg-white p-6 rounded-lg shadow-md">
                     <h2 class="text-xl font-bold mb-4 border-b pb-2">2. Checklists de Vistoria</h2>
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
-                        
+
                         <div class="space-y-3">
                             <h3 class="font-semibold text-gray-700">Itens do Veículo</h3>
                             <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Chave (Controle)</label>
@@ -287,18 +73,18 @@ textarea,
                             <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Rádio/Multimídia</label>
                             <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Módulo de som</label>
                             <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Auto-falantes</label>
-                            
+
                             <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">TAG Pedágio</label>
                             <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Tapetes</label>
                             <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Acendedor de cigarros</label>
                             <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Antena</label>
                             <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Calotas</label>
                             <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Tampa do combustível</label>
-                            
-                            <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Protetor de caçamba</label> 
+
+                            <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Protetor de caçamba</label>
                             <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Pertences (Cadastrar em Obs.)</label>
-                            
-                    
+
+
                             <div class="pt-2">
                                 <h4 class="font-semibold text-sm text-gray-700">TANQUE DE COMBUSTÍVEL:</h4>
                                 <div class="flex flex-wrap space-x-3 text-sm">
@@ -310,7 +96,7 @@ textarea,
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="space-y-3">
                             <h3 class="font-semibold text-gray-700">Funcionamento</h3>
                             <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Buzina</label>
@@ -336,9 +122,9 @@ textarea,
                             <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Vazamentos de óleo</label>
                             <label class="flex items-center"><input type="text" class="mr-2 w-20 p-1 border rounded text-xs"> Pneus</label>
                             <label class="flex items-center"><input type="text" class="mr-2 w-20 p-1 border rounded text-xs"> Estepe</label>
-                            <label class="flex items-center"><input type="text" class="mr-2 w-20 p-1 border rounded text-xs"> Estado dos bancos</label> 
-                          
-                            
+                            <label class="flex items-center"><input type="text" class="mr-2 w-20 p-1 border rounded text-xs"> Estado dos bancos</label>
+
+
                         </div>
                     </div>
                 </section>
@@ -361,11 +147,11 @@ textarea,
                     </div>
                 </section>
             </div>
-            
+
             <section id="observacoes" class="bg-white p-6 rounded-lg shadow-md">
                 <h2 class="text-xl font-bold mb-4 border-b pb-2">4. Observações Gerais</h2>
                 <textarea id="observacoes-textarea" placeholder="Ex.: Apreendido Operação xxx; Luz injeção eletrônica acesa..." class="w-full p-2 border rounded-md h-24 no-print"></textarea>
-                
+
                 <div id="observacoes-print" class="hidden"></div>
             </section>
 
@@ -391,7 +177,7 @@ textarea,
                         <input type="text" class="w-full p-2 border rounded-md">
                     </div>
                 </div>
-                
+
                  <div class="mt-12 signature-block">
                     <p class="font-semibold text-sm mb-2">Assinaturas:</p>
                     <div id="responsaveis-signatures-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -440,7 +226,7 @@ textarea,
             <footer class="mt-4 text-sm text-gray-700">
                 <div class="text-center mb-4">
                     <div id="local-data-inputs" class="flex items-center justify-center gap-2">
-                        <strong>Local e data da apreensão:</strong> 
+                        <strong>Local e data da apreensão:</strong>
                         <input id="cidade-input" type="text" placeholder="Cidade" class="w-48 p-1 border rounded-md text-sm">,
                         <input id="data-input" type="date" class="p-1 border rounded-md text-sm">
                     </div>
@@ -459,7 +245,7 @@ textarea,
                 </div>
             </footer>
         </main>
-        
+
         <div class="mt-8 text-center space-x-2 sm:space-x-4 no-print">
             <button onclick="imprimir()" class="bg-teal-600 text-white font-bold py-2 px-4 sm:px-6 rounded-lg hover:bg-teal-700 transition-colors text-sm sm:text-base">Imprimir / PDF</button>
             <button onclick="clearForm()" class="bg-red-500 text-white font-bold py-2 px-4 sm:px-6 rounded-lg hover:bg-red-600 transition-colors text-sm sm:text-base">Limpar</button>
@@ -481,7 +267,7 @@ textarea,
     <div id="signature-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 hidden z-50">
     <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-lg flex flex-col" style="height: 80vh; max-height: 500px;">
         <h3 class="text-lg font-bold mb-4 text-center">
-            Desenhe a Assinatura 
+            Desenhe a Assinatura
             <span class="text-red-600 font-bold">(Vire a tela na horizontal)</span>
         </h3>
         <div class="flex-grow w-full">
@@ -498,268 +284,9 @@ textarea,
 </div>
 
 
-    <script>
-        let signaturePad;
-        let currentSignatureTargetId;
+    <script type="module" src="js/app.js"></script>
+    </body>
 
-        document.addEventListener('DOMContentLoaded', function () {
-            const carDiagramContainer = document.getElementById('car-diagram-container').querySelector('.relative');
-            const damageModal = document.getElementById('damage-modal');
-            const damageDescription = document.getElementById('damage-description');
-            const damageError = document.getElementById('damage-error');
-            const saveDamageBtn = document.getElementById('save-damage');
-            const cancelDamageBtn = document.getElementById('cancel-damage');
-            const damageList = document.getElementById('damage-list');
-            
-            const signatureModal = document.getElementById('signature-modal');
-            const canvas = document.getElementById('signature-pad');
-            const clearSignatureBtn = document.getElementById('clear-signature');
-            const saveSignatureBtn = document.getElementById('save-signature');
-            const closeSignatureBtn = document.getElementById('close-signature');
-
-            signaturePad = new SignaturePad(canvas, {
-                backgroundColor: 'rgba(255, 255, 255, 0)' // Transparent background
-            });
-
-            function resizeCanvas() {
-                const ratio =  Math.max(window.devicePixelRatio || 1, 1);
-                canvas.width = canvas.offsetWidth * ratio;
-                canvas.height = canvas.offsetHeight * ratio;
-                canvas.getContext("2d").scale(ratio, ratio);
-                signaturePad.clear(); 
-            }
-            window.addEventListener("resize", resizeCanvas);
-            
-            window.addEventListener("orientationchange", function() {
-                if (!signatureModal.classList.contains('hidden')) {
-                    // Close and reopen the modal to force a resize
-                    signatureModal.classList.add('hidden');
-                    setTimeout(() => {
-                        signatureModal.classList.remove('hidden');
-                        resizeCanvas();
-                    }, 100);
-                }
-            });
-
-            window.openSignatureModal = (targetId) => {
-                currentSignatureTargetId = targetId;
-                signatureModal.classList.remove('hidden');
-                setTimeout(() => {
-                    resizeCanvas();
-                }, 10); 
-            };
-
-            closeSignatureBtn.addEventListener('click', () => {
-                signatureModal.classList.add('hidden');
-            });
-
-            clearSignatureBtn.addEventListener('click', () => {
-                signaturePad.clear();
-            });
-
-            saveSignatureBtn.addEventListener('click', () => {
-                if (signaturePad.isEmpty()) {
-                    alert("Por favor, forneça uma assinatura.");
-                } else {
-                    const dataURL = signaturePad.toDataURL('image/png');
-                    const targetDiv = document.getElementById(`signature-display-${currentSignatureTargetId}`);
-                    targetDiv.innerHTML = `<img src="${dataURL}" alt="Assinatura" class="mx-auto h-full object-contain signature-image"/>`;
-                    
-                    const buttonContainer = targetDiv.parentElement.querySelector('.border-t-2');
-                    buttonContainer.querySelector('button').textContent = '[ Refazer ]';
-                    
-                    signatureModal.classList.add('hidden');
-                    makeDraggable();
-                }
-            });
+    </html>
 
 
-            let damages = [];
-            let currentClickPosition = { x: 0, y: 0 };
-            
-            function getRandomColor() {
-                const letters = '0123456789ABCDEF';
-                let color = '#';
-                for (let i = 0; i < 6; i++) {
-                    color += letters[Math.floor(Math.random() * 16)];
-                }
-                return color;
-            }
-
-            carDiagramContainer.addEventListener('click', function (e) {
-                const rect = carDiagramContainer.getBoundingClientRect();
-                currentClickPosition = {
-                    x: ((e.clientX - rect.left) / rect.width) * 100,
-                    y: ((e.clientY - rect.top) / rect.height) * 100
-                };
-                damageDescription.value = '';
-                damageError.classList.add('hidden');
-                damageModal.classList.remove('hidden');
-                damageDescription.focus();
-            });
-
-            function closeDamageModal() {
-                damageModal.classList.add('hidden');
-            }
-
-            cancelDamageBtn.addEventListener('click', closeDamageModal);
-
-            saveDamageBtn.addEventListener('click', function () {
-                const description = damageDescription.value.trim();
-                if (description) {
-                    const color = getRandomColor();
-                    damages.push({ ...currentClickPosition, description, color });
-                    renderDamages();
-                    closeDamageModal();
-                } else {
-                    damageError.classList.remove('hidden');
-                }
-            });
-
-            function renderDamages() {
-                carDiagramContainer.querySelectorAll('.damage-marker').forEach(marker => marker.remove());
-                
-                damageList.innerHTML = '';
-                if (damages.length === 0) {
-                    damageList.innerHTML = '<li class="text-gray-400 italic">Nenhuma avaria registrada.</li>';
-                } else {
-                    damages.forEach((damage, index) => {
-                        const marker = document.createElement('div');
-                        marker.className = 'damage-marker';
-                        marker.style.left = `${damage.x}%`;
-                        marker.style.top = `${damage.y}%`;
-                        marker.style.backgroundColor = damage.color;
-                        marker.title = damage.description;
-                        marker.dataset.index = index;
-                        carDiagramContainer.appendChild(marker);
-
-                        const listItem = document.createElement('li');
-                        listItem.className = 'flex items-center';
-                        
-                        const colorDot = document.createElement('span');
-                        colorDot.className = 'w-3 h-3 rounded-full mr-2 flex-shrink-0';
-                        colorDot.style.backgroundColor = damage.color;
-                        
-                        listItem.appendChild(colorDot);
-                        listItem.append(damage.description);
-                        damageList.appendChild(listItem);
-                    });
-                }
-            }
-
-            function makeDraggable() {
-                const signatures = document.querySelectorAll('.signature-display');
-                signatures.forEach(signature => {
-                    let isDragging = false;
-                    let offsetX, offsetY;
-
-                    const startDrag = (e) => {
-                        isDragging = true;
-                        const clientX = e.clientX || e.touches[0].clientX;
-                        const clientY = e.clientY || e.touches[0].clientY;
-                        offsetX = clientX - signature.offsetLeft;
-                        offsetY = clientY - signature.offsetTop;
-                        signature.style.cursor = 'grabbing';
-                    };
-
-                    const drag = (e) => {
-                        if (!isDragging) return;
-                        e.preventDefault();
-                        const clientX = e.clientX || e.touches[0].clientX;
-                        const clientY = e.clientY || e.touches[0].clientY;
-                        signature.style.left = `${clientX - offsetX}px`;
-                        signature.style.top = `${clientY - offsetY}px`;
-                    };
-
-                    const stopDrag = () => {
-                        isDragging = false;
-                        signature.style.cursor = 'move';
-                    };
-
-                    signature.addEventListener('mousedown', startDrag);
-                    signature.addEventListener('touchstart', startDrag);
-                    document.addEventListener('mousemove', drag);
-                    document.addEventListener('touchmove', drag, { passive: false });
-                    document.addEventListener('mouseup', stopDrag);
-                    document.addEventListener('touchend', stopDrag);
-                });
-            }
-
-            document.getElementById('photo-upload').addEventListener('change', function(event) {
-                const preview = document.getElementById('photo-gallery-preview');
-                const files = event.target.files;
-
-                for (const file of files) {
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        const wrapper = document.createElement('div');
-                        wrapper.className = 'relative p-2 border rounded-lg shadow';
-
-                        const img = document.createElement('img');
-                        img.src = e.target.result;
-                        img.className = 'w-full h-auto object-cover rounded-lg';
-                        
-                        const removeBtn = document.createElement('button');
-                        removeBtn.innerHTML = '&times;';
-                        removeBtn.className = 'absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center font-bold';
-                        removeBtn.onclick = function() {
-                            wrapper.remove();
-                        };
-
-                        wrapper.appendChild(img);
-                        wrapper.appendChild(removeBtn);
-                        preview.appendChild(wrapper);
-                    }
-                    reader.readAsDataURL(file);
-                }
-                event.target.value = '';
-            });
-        });
-
-        function imprimir() {
-            // Bloco de Cidade e Data
-            const cidade = document.getElementById('cidade-input').value || '________________';
-            const dataInput = document.getElementById('data-input').value;
-            let dataFormatada = '____ / ____ / ________';
-            if (dataInput) {
-                const [ano, mes, dia] = dataInput.split('-');
-                dataFormatada = `${dia} / ${mes} / ${ano}`;
-            }
-            
-            document.getElementById('cidade-print').textContent = cidade;
-            document.getElementById('data-print').textContent = dataFormatada;
-
-            // Bloco da Galeria de Fotos (aqui estava o problema)
-            const preview = document.getElementById('photo-gallery-preview');
-            const printGallery = document.getElementById('photo-gallery-print');
-            printGallery.innerHTML = ''; // Limpa fotos anteriores
-            const images = preview.querySelectorAll('img');
-            
-            images.forEach((img, index) => { // <-- O início do loop
-                const item = document.createElement('div');
-                item.className = 'photo-print-item';
-                const imgClone = img.cloneNode();
-                const title = document.createElement('p');
-                title.textContent = `Foto ${index + 1}`;
-                item.appendChild(imgClone);
-                item.appendChild(title);
-                printGallery.appendChild(item);
-            }); // <-- O final "});" que agora está no lugar certo
-            
-            // Bloco das Observações
-            const observacoesText = document.getElementById('observacoes-textarea').value;
-            const observacoesPrintDiv = document.getElementById('observacoes-print');
-            observacoesPrintDiv.textContent = observacoesText; // .textContent preserva as quebras de linha
-            
-            // Chamar a impressão
-            window.print();
-        }
-
-        function clearForm() {
-            if (confirm('Tem certeza que deseja limpar todos os campos e avarias registradas? Esta ação não pode ser desfeita.')) {
-                location.reload();
-            }
-        }
-    </script>
-</body>
-</html>
