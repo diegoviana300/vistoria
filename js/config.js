@@ -73,7 +73,7 @@ const GRUPOS = {
 
 const DEFAULT_INST_NOME = "GRUPO DE ATUAÇÃO ESPECIAL DE COMBATE ÀS ORGANIZAÇÕES CRIMINOSAS - GAECO";
 const DEFAULT_HEADER_LOGO = "imagem/logo_mpsc.png";
-const DEFAULT_FOOTER_LOGO = "imagem/gaeco2.bmp";
+const DEFAULT_FOOTER_LOGO = "imagem/logos.png";
 
 // CHAVE DO LOCALSTORAGE
 const STORAGE_KEY = "vistoriaConfig";
