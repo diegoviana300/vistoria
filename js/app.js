@@ -3,6 +3,7 @@ import { initSignatures } from './signatures.js';
 import { initDamageMap } from './damageMap.js';
 import { initPhotos } from './photos.js';
 import { setupPrint } from './print.js';
+import { initVistoriaStorage } from './vistoriaStorage.js';
 
 document.addEventListener('DOMContentLoaded', () => {
     initConfig();
@@ -10,4 +11,5 @@ document.addEventListener('DOMContentLoaded', () => {
     initDamageMap();
     initPhotos();
     setupPrint();
+    initVistoriaStorage();
 });

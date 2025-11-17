@@ -74,9 +74,12 @@ const GRUPOS = {
 const DEFAULT_INST_NOME = "GRUPO DE ATUAÇÃO ESPECIAL DE COMBATE ÀS ORGANIZAÇÕES CRIMINOSAS - GAECO";
 const DEFAULT_HEADER_LOGO = "imagem/logo_mpsc.png";
 const DEFAULT_FOOTER_LOGO = "imagem/gaeco2.bmp";
+
+// CHAVE DO LOCALSTORAGE
 const STORAGE_KEY = "vistoriaConfig";
 
 export function initConfig() {
+    // elementos dinâmicos
     const headerLogo = document.getElementById("header-logo");
     const printHeaderLogo = document.getElementById("print-header-logo");
     const footerLogo = document.getElementById("footer-logo");
@@ -90,6 +93,7 @@ export function initConfig() {
     const footerEmailEl = document.getElementById("footer-email");
     const cidadeInput = document.getElementById("cidade-input");
 
+    // elementos do modal
     const configButton = document.getElementById("config-button");
     const configModal = document.getElementById("config-modal");
     const grupoSelect = document.getElementById("config-grupo");
@@ -104,7 +108,7 @@ export function initConfig() {
         return;
     }
 
-    // Preenche o select com os grupos
+    // Preenche opções de grupo no select
     Object.keys(GRUPOS).forEach((key) => {
         const opt = document.createElement("option");
         opt.value = key;
@@ -112,6 +116,7 @@ export function initConfig() {
         grupoSelect.appendChild(opt);
     });
 
+    // Lê config do localStorage (se existir)
     let stored = null;
     try {
         stored = JSON.parse(localStorage.getItem(STORAGE_KEY));
@@ -129,26 +134,30 @@ export function initConfig() {
     function applyConfig() {
         const group = GRUPOS[currentConfig.groupKey] || GRUPOS["Itajaí"];
 
+        // logos
         if (headerLogo) headerLogo.src = currentConfig.headerLogo;
         if (printHeaderLogo) printHeaderLogo.src = currentConfig.headerLogo;
         if (footerLogo) footerLogo.src = currentConfig.footerLogo;
 
+        // nome instituição
         if (instNomeEl) instNomeEl.textContent = currentConfig.instNome;
         if (printInstNomeEl) printInstNomeEl.textContent = currentConfig.instNome;
 
+        // nome grupo regional
         const regionalText = group.nome_g_regional || `GRUPO REGIONAL DE ${group.regiao}`;
         if (regionalNomeEl) regionalNomeEl.textContent = regionalText;
         if (printRegionalNomeEl) printRegionalNomeEl.textContent = regionalText;
 
+        // endereço e e-mail
         if (footerEnderecoEl) footerEnderecoEl.textContent = group.endereco;
         if (footerEmailEl) footerEmailEl.textContent = `E-mail: ${group.email}`;
 
-        // Se cidade estiver vazia, preenche com a cidade do grupo
+        // cidade padrão (se vazio)
         if (cidadeInput && !cidadeInput.value) {
             cidadeInput.value = group.cidade;
         }
 
-        // Fundo branco como você pediu
+        // fundo branco
         document.body.classList.remove("bg-stone-100");
         document.body.classList.add("bg-white");
     }
@@ -181,6 +190,7 @@ export function initConfig() {
         e.preventDefault();
 
         const selectedGroup = grupoSelect.value;
+
         currentConfig = {
             groupKey: GRUPOS[selectedGroup] ? selectedGroup : "Itajaí",
             headerLogo: headerLogoInput.value || DEFAULT_HEADER_LOGO,
@@ -188,17 +198,18 @@ export function initConfig() {
             instNome: instNomeInput.value || DEFAULT_INST_NOME
         };
 
+        // AQUI É A PARTE QUE A DOC PROMETEU
         try {
             localStorage.setItem(STORAGE_KEY, JSON.stringify(currentConfig));
-        } catch {
-            // se der erro no localStorage, segue sem persistir
+        } catch (err) {
+            console.warn("Config: não foi possível salvar no localStorage", err);
         }
 
         applyConfig();
         closeModal();
     });
 
-    // Fecha o modal clicando no fundo escuro
+    // Fecha modal clicando fora
     configModal.addEventListener("click", (e) => {
         if (e.target === configModal) {
             closeModal();

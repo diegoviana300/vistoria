@@ -60,19 +60,19 @@
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
     <div>
         <label class="block font-semibold text-sm mb-1">Autos n.</label>
-        <input type="text" class="w-full p-2 border rounded-md">
+        <input id="autos-numero" type="text" class="w-full p-2 border rounded-md">
     </div>
     <div>
         <label class="block font-semibold text-sm mb-1">Veículo</label>
-        <input type="text" class="w-full p-2 border rounded-md">
+        <input id="veiculo-nome" type="text" class="w-full p-2 border rounded-md">
     </div>
     <div>
         <label class="block font-semibold text-sm mb-1">Placa</label>
-        <input type="text" value="" class="w-full p-2 border rounded-md">
+        <input id="veiculo-placa" type="text" value="" class="w-full p-2 border rounded-md">
     </div>
     <div>
         <label class="block font-semibold text-sm mb-1">KM</label>
-        <input type="number" class="w-full p-2 border rounded-md">
+        <input id="veiculo-km" type="number" class="w-full p-2 border rounded-md">
     </div>
 </div>
             </section>
@@ -177,21 +177,21 @@
                 <div id="responsaveis-inputs-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6 divide-y md:divide-y-0 md:divide-x divide-gray-300">
                     <div>
                         <label class="block font-semibold text-sm mb-1">Policial responsável/vistoriador:</label>
-                        <input type="text" value="" class="w-full p-2 border rounded-md mb-2">
+                        <input id="resp-vistoriador-nome" type="text" value="" class="w-full p-2 border rounded-md mb-2">
                         <label class="block font-semibold text-sm mb-1">Matrícula:</label>
-                        <input type="text" value="" class="w-full p-2 border rounded-md">
+                        <input id="resp-vistoriador-matricula" type="text" value="" class="w-full p-2 border rounded-md">
                     </div>
                     <div>
                         <label class="block font-semibold text-sm mb-1">Proprietário/possuidor:</label>
-                        <input type="text" class="w-full p-2 border rounded-md mb-2">
+                        <input id="resp-proprietario-nome" type="text" class="w-full p-2 border rounded-md mb-2">
                         <label class="block font-semibold text-sm mb-1">CPF:</label>
-                        <input type="text" class="w-full p-2 border rounded-md">
+                        <input id="resp-proprietario-cpf" type="text" class="w-full p-2 border rounded-md">
                     </div>
                     <div>
                         <label class="block font-semibold text-sm mb-1">Resp. Recolhimento/Empresa:</label>
-                        <input type="text" class="w-full p-2 border rounded-md mb-2">
+                        <input id="resp-recolhimento-nome" type="text" class="w-full p-2 border rounded-md mb-2">
                         <label class="block font-semibold text-sm mb-1">CPF/CNPJ:</label>
-                        <input type="text" class="w-full p-2 border rounded-md">
+                        <input id="resp-recolhimento-doc" type="text" class="w-full p-2 border rounded-md">
                     </div>
                 </div>
 
@@ -264,11 +264,44 @@
 
         </main>
 
-        <div class="mt-8 text-center space-x-2 sm:space-x-4 no-print">
-            <button onclick="imprimir()" class="bg-teal-600 text-white font-bold py-2 px-4 sm:px-6 rounded-lg hover:bg-teal-700 transition-colors text-sm sm:text-base">Imprimir / PDF</button>
-            <button onclick="clearForm()" class="bg-red-500 text-white font-bold py-2 px-4 sm:px-6 rounded-lg hover:bg-red-600 transition-colors text-sm sm:text-base">Limpar</button>
-        </div>
+<div class="mt-8 flex items-center justify-center gap-3 sm:gap-6 no-print">
+    <div class="flex gap-2">
+        <!-- Botão salvar vistoria (apenas ícone) -->
+        <button id="save-vistoria-btn" type="button"
+            class="inline-flex items-center justify-center rounded-full p-2 border border-teal-600 text-teal-600 hover:bg-teal-50 focus:outline-none focus:ring-2 focus:ring-teal-500"
+            title="Salvar vistoria">
+            <!-- Ícone de disquete / save -->
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"
+                aria-hidden="true">
+                <path
+                    d="M4 3a2 2 0 00-2 2v10c0 1.1.9 2 2 2h12a2 2 0 002-2V7.83a2 2 0 00-.59-1.41l-2.83-2.83A2 2 0 0013.17 3H4zm2 2h6v3H6V5zm3 5a3 3 0 100 6 3 3 0 000-6z" />
+            </svg>
+        </button>
+
+        <!-- Botão listar vistorias salvas (apenas ícone) -->
+        <button id="list-vistorias-btn" type="button"
+            class="inline-flex items-center justify-center rounded-full p-2 border border-gray-500 text-gray-600 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-teal-500"
+            title="Vistorias salvas">
+            <!-- Ícone de lista -->
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor"
+                aria-hidden="true">
+                <path d="M4 6h2v2H4V6zm0 4h2v2H4v-2zm0 4h2v2H4v-2zm4-8h8v2H8V6zm0 4h8v2H8v-2zm0 4h8v2H8v-2z" />
+            </svg>
+        </button>
     </div>
+
+    <div class="flex gap-2 sm:gap-4">
+        <button onclick="imprimir()"
+            class="bg-teal-600 text-white font-bold py-2 px-4 sm:px-6 rounded-lg hover:bg-teal-700 transition-colors text-sm sm:text-base">
+            Imprimir / PDF
+        </button>
+        <button onclick="clearForm()"
+            class="bg-red-500 text-white font-bold py-2 px-4 sm:px-6 rounded-lg hover:bg-red-600 transition-colors text-sm sm:text-base">
+            Limpar
+        </button>
+    </div>
+</div>
+
 
     <div id="damage-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 hidden z-50">
         <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-sm">
@@ -345,6 +378,20 @@
     </div>
 </div>
 
+<div id="vistorias-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 hidden z-50">
+    <div class="bg-white rounded-lg shadow-xl p-6 w-full max-w-2xl">
+        <h3 class="text-lg font-bold mb-4 text-center">Vistorias salvas</h3>
+        <div id="vistorias-list" class="max-h-80 overflow-y-auto text-sm">
+            <!-- lista gerada via JS -->
+        </div>
+        <div class="mt-4 flex justify-end">
+            <button id="vistorias-close"
+                class="bg-gray-200 text-gray-800 font-semibold py-2 px-4 rounded-lg hover:bg-gray-300 text-sm">
+                Fechar
+            </button>
+        </div>
+    </div>
+</div>
 
     <script type="module" src="js/app.js"></script>
     </body>
