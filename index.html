@@ -111,11 +111,35 @@ textarea,
             display: grid !important;
             gap: 0.4rem !important;
             }
+
+            #responsaveis-inputs-grid > :not([hidden]) ~ :not([hidden]) {
+                border-top-width: 0 !important;
+                border-left-width: 0 !important;
+            }
+
+            #observacoes-textarea.no-print {
+                display: none !important;
+            }
+
+            /* 2. Mostra e formata o DIV de observações para print */
+            #observacoes-print {
+                display: block !important;
+                font-size: 8pt;
+                min-height: 2.5rem; /* Terá uma altura mínima, mas vai crescer conforme o texto */
+                padding: 4px 6px;
+                border: 1px solid #ccc; /* Mantém a aparência de um campo */
+                border-radius: 0.25rem;
+                background: #fff; /* Fundo branco para garantir */
+                
+                /* Essas duas linhas são essenciais para manter as quebras de linha e o formato do texto */
+                white-space: pre-wrap;
+                word-wrap: break-word;
+            }
+
             #identificacao .grid {
                 grid-template-columns: repeat(4, 1fr) !important;
             }
-             /* Regras para #responsaveis com 3 colunas */
-#responsaveis-inputs-grid, #responsaveis-signatures-grid {
+             #responsaveis-inputs-grid, #responsaveis-signatures-grid {
     display: grid !important; /* Garante o display */
     grid-template-columns: repeat(3, 1fr) !important;
     gap: 0.2rem !important; /* Diminui o gap para caber as 3 colunas */
@@ -257,22 +281,26 @@ textarea,
                         
                         <div class="space-y-3">
                             <h3 class="font-semibold text-gray-700">Itens do Veículo</h3>
-                            <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">CRLV</label>
-                            <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Manual</label>
+                            <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Chave (Controle)</label>
                             <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Chave Reserva</label>
-                            <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">TAG</label>
-                            <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Cartão Abastecimento</label>
-                            <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Cartão Seguro</label>
-                            <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Adesivos</label>
+                            <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Manual</label>
+                            <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Rádio/Multimídia</label>
+                            <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Módulo de som</label>
+                            <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Auto-falantes</label>
+                            
+                            <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">TAG Pedágio</label>
+                            <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Tapetes</label>
+                            <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Acendedor de cigarros</label>
+                            <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Antena</label>
+                            <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Calotas</label>
+                            <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Tampa do combustível</label>
+                            
+                            <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Protetor de caçamba</label> 
+                            <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Pertences (Cadastrar em Obs.)</label>
+                            
+                    
                             <div class="pt-2">
-                                <h4 class="font-semibold text-sm text-gray-600">NÍVEL:</h4>
-                                <label class="flex items-center text-sm"><input type="checkbox" class="h-4 w-4 rounded mr-2">Óleo de Motor</label>
-                                <label class="flex items-center text-sm"><input type="checkbox" class="h-4 w-4 rounded mr-2">Óleo de freio</label>
-                                <label class="flex items-center text-sm"><input type="checkbox" class="h-4 w-4 rounded mr-2">Água do radiador</label>
-                                <label class="flex items-center text-sm"><input type="checkbox" class="h-4 w-4 rounded mr-2">Água do esguicho</label>
-                            </div>
-                            <div class="pt-2">
-                                <h4 class="font-semibold text-sm text-gray-600">TANQUE DE COMBUSTÍVEL:</h4>
+                                <h4 class="font-semibold text-sm text-gray-700">TANQUE DE COMBUSTÍVEL:</h4>
                                 <div class="flex flex-wrap space-x-3 text-sm">
                                     <label class="flex items-center"><input type="radio" name="combustivel" class="mr-1">R</label>
                                     <label class="flex items-center"><input type="radio" name="combustivel" class="mr-1">¼</label>
@@ -285,38 +313,32 @@ textarea,
                         
                         <div class="space-y-3">
                             <h3 class="font-semibold text-gray-700">Funcionamento</h3>
-                            <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Retrovisores</label>
                             <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Buzina</label>
-                            <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Limpador de para-brisa</label>
-                            <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Esguicho</label>
-                            <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Luz interna</label>
+							 <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Pisca-alerta</label>
                             <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Luz do painel</label>
                             <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Luz alta</label>
                             <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Luz baixa</label>
-                            <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Luz de ré</label>
-                            <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Pisca-alerta/pisca-pisca</label>
-                            <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Faróis</label>
-                            <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Luz de freio</label>
+                            <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Luz de neblina</label>
+							<label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Luz de ré</label>
+							<label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Luz de freio</label>
                             <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Luz da placa</label>
-                            <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Velocímetro</label>
+                            <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Ar Condicionado</label>
                         </div>
 
                         <div class="space-y-3">
-                            <h3 class="font-semibold text-gray-700">Estado de Conservação</h3>
-                            <label class="flex items-center"><input type="text" class="mr-2 w-20 p-1 border rounded text-xs"> Pneus</label>
-                            <label class="flex items-center"><input type="text" class="mr-2 w-20 p-1 border rounded text-xs"> Estepe</label>
-                            <label class="flex items-center"><input type="text" class="mr-2 w-20 p-1 border rounded text-xs"> Estado dos bancos</label>
-                            <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Extintor de incêndio</label>
-                            <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Cintos de segurança</label>
+                            <h3 class="font-semibold text-gray-700">Outros itens</h3>
                             <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Macaco</label>
                             <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Chave de roda</label>
-                            <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Tampa do radiador</label>
                             <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Triângulo</label>
-                            <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Freio de serviço</label>
+                            <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Extintor de incêndio</label>
+                            <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Cintos de segurança</label>
                             <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Freio de estacionamento</label>
                             <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Vazamentos de óleo</label>
-                            <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Acendedor de cigarros</label>
-                            <label class="flex items-center"><input type="checkbox" class="h-4 w-4 rounded mr-2">Escapamentos</label>
+                            <label class="flex items-center"><input type="text" class="mr-2 w-20 p-1 border rounded text-xs"> Pneus</label>
+                            <label class="flex items-center"><input type="text" class="mr-2 w-20 p-1 border rounded text-xs"> Estepe</label>
+                            <label class="flex items-center"><input type="text" class="mr-2 w-20 p-1 border rounded text-xs"> Estado dos bancos</label> 
+                          
+                            
                         </div>
                     </div>
                 </section>
@@ -342,14 +364,14 @@ textarea,
             
             <section id="observacoes" class="bg-white p-6 rounded-lg shadow-md">
                 <h2 class="text-xl font-bold mb-4 border-b pb-2">4. Observações Gerais</h2>
-                <textarea id="observacoes-textarea" placeholder="Digite aqui quaisquer observações adicionais..." class="w-full p-2 border rounded-md h-24 no-print"></textarea>
+                <textarea id="observacoes-textarea" placeholder="Ex.: Apreendido Operação xxx; Luz injeção eletrônica acesa..." class="w-full p-2 border rounded-md h-24 no-print"></textarea>
                 
                 <div id="observacoes-print" class="hidden"></div>
             </section>
 
             <section id="responsaveis" class="bg-white p-6 rounded-lg shadow-md">
                 <h2 class="text-xl font-bold mb-4 border-b pb-2">5. Responsáveis</h2>
-                <div id="responsaveis-inputs-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div id="responsaveis-inputs-grid" class="grid grid-cols-1 md:grid-cols-3 gap-6 divide-y md:divide-y-0 md:divide-x divide-gray-300">
                     <div>
                         <label class="block font-semibold text-sm mb-1">Policial responsável/vistoriador:</label>
                         <input type="text" value="" class="w-full p-2 border rounded-md mb-2">
@@ -432,7 +454,7 @@ textarea,
                         <p>E-mail: gaecoitajai@mpsc.mp.br</p>
                     </div>
                     <div class="flex items-center space-x-2">
-                        <img src="imagem/logos.png" alt="Logos" class="h-10">
+                        <img src="imagem/gaeco2.bmp" alt="Logos" class="h-10">
                     </div>
                 </div>
             </footer>
@@ -695,6 +717,7 @@ textarea,
         });
 
         function imprimir() {
+            // Bloco de Cidade e Data
             const cidade = document.getElementById('cidade-input').value || '________________';
             const dataInput = document.getElementById('data-input').value;
             let dataFormatada = '____ / ____ / ________';
@@ -706,11 +729,13 @@ textarea,
             document.getElementById('cidade-print').textContent = cidade;
             document.getElementById('data-print').textContent = dataFormatada;
 
+            // Bloco da Galeria de Fotos (aqui estava o problema)
             const preview = document.getElementById('photo-gallery-preview');
             const printGallery = document.getElementById('photo-gallery-print');
-            printGallery.innerHTML = ''; // Clear previous photos
+            printGallery.innerHTML = ''; // Limpa fotos anteriores
             const images = preview.querySelectorAll('img');
-            images.forEach((img, index) => {
+            
+            images.forEach((img, index) => { // <-- O início do loop
                 const item = document.createElement('div');
                 item.className = 'photo-print-item';
                 const imgClone = img.cloneNode();
@@ -719,8 +744,14 @@ textarea,
                 item.appendChild(imgClone);
                 item.appendChild(title);
                 printGallery.appendChild(item);
-            });
+            }); // <-- O final "});" que agora está no lugar certo
             
+            // Bloco das Observações
+            const observacoesText = document.getElementById('observacoes-textarea').value;
+            const observacoesPrintDiv = document.getElementById('observacoes-print');
+            observacoesPrintDiv.textContent = observacoesText; // .textContent preserva as quebras de linha
+            
+            // Chamar a impressão
             window.print();
         }
 
